@@ -1,0 +1,153 @@
+:REVEAL_PROPERTIES:
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_VERSION: 4
+#+REVEAL_THEME: moon
+#+REVEAL_TRANS: slide
+#+REVEAL_MIN_SCALE: 1.0
+#+REVEAL_MAX_SCALE: 1.0
+#+REVEAL_PLUGINS: (math)
+#+OPTIONS: toc:nil num:nil timestamp:nil
+:END:
+
+#+TITLE: Iris
+#+AUTHOR: Xinglu & Sascha
+
+* What is Iris?
+** Disclaimer
+#+ATTR_REVEAL: :frag (appear)
+- Iris is not a small project
+- 123 papers and 21 doctoral theses
+- Highly influential
+  #+ATTR_REVEAL: :frag (appear)
+  + 2023 Alonzo Church Award for Outstanding Contributions to Logic and Computation
+  + 2025 Most Influential POPL Paper Award
+    - awarded for most influential paper of last decade
+** Iris in one sentence
+#+ATTR_REVEAL: :frag (appear)
+- Iris is a *generic higher-order concurrent separation logic*.
+** Iris in one (longer) sentence
+#+ATTR_REVEAL: :frag (appear)
+Iris is a framework for
+#+ATTR_REVEAL: :frag (appear)
++ foundational machine-checked proofs
++ of deep correctness properties
++ for fine-grained concurrent programs
++ in higher-order imperative languages
+** Some Notes
+#+ATTR_REVEAL: :frag (appear)
+- formalized entirely in Rocq proof assistant
+- not tied to particular language semantics
+- example: type safety proof of (a realistic subset of) Rust formalized using Iris
+* Who is behind Iris?
+:PROPERTIES:
+:ID:       ab7c0539-4948-46c7-8fba-5591d366ef3a
+:END:
+#+attr_org: :width 600px
+[[file:images/2025-04-30_13-30-37_screenshot.png]]
+* A Brief History of Separation logic
+** What is Separation Logic?
+#+ATTR_REVEAL: :frag (appear)
+- extension of Hoare Logic
+- allows reasoning about pointer-manipulating programs
+- initially introduced by O'Hearn in 2001
+- later extended to CSL
+- solves two problems - Object Orientation and Concurrency
+** Motivation: Why Separation Logic?
+#+ATTR_REVEAL: :frag (appear)
+- Consider program:
+  #+BEGIN_SRC c
+  void f(int* x, int* y) {
+    *x = 1;
+    *y = 2;
+  }
+  #+END_SRC
+- Naive Hoare logic spec:
+  #+begin_src c
+{ true } f { *x == 1 ^ *y == 2 }
+  #+end_src
+- What if $x == y$? Spec becomes invalid!
+- What we want instead:
+  #+begin_src c
+{ "x and y disjoint" } f { *x == 1 ^ *y == 2 }
+  #+end_src
+
+** Separation Logic: Notation
+#+ATTR_REVEAL: :frag (appear)
+ - $↦$ : points-to assertion (e.g., $x ↦ 5$)
+ - $*$ : separating conjunction (asserts disjointness)
+ - Can now formulate this:
+        \begin{aligned}
+        \{ x ↦ \_ * y ↦ \_ \}\ f\ \{ x ↦ 1 * y ↦ 2 \}
+        \end{aligned}
+** Semantics of $*$
+\begin{aligned}
+(P * Q)(h) \iff \exists h_1, h_2.~ h = h_1 \uplus h_2 \land P(h_1) \land Q(h_2)
+\end{aligned}
+#+ATTR_REVEAL: :frag (appear)
+- $P * Q$ holds if:
+  - Heap can be split into disjoint parts $h1,\ h2$
+  - $P$ holds on $h1$, $Q$ on $h2$
+
+** Frame Rule
+\begin{aligned}
+\frac{\{P\}~C~\{Q\}}{\{P * R\}~C~\{Q * R\}}
+\end{aligned}
+
+#+ATTR_REVEAL: :frag (appear)
+- Useful for local reasoning.
+- Add unaffected context $R$ without changing correctness.
+** Conclusion thus far
+#+ATTR_REVEAL: :frag (appear)
+- Convenient reasoning for shared heap where everyone operates on disjoint data
+- But at some point, there *will* be shared data
+* CSL: Reasoning about shared data
+** Separation Logic \to CSL: O'Hearn 2007
+- O'Hearns CSL = SL + resource invariants
+- a quick example
+- ppl liked this, avalanche of subsequent works
+- problem: every new paper/library had a slightly different way about the shared data reasoning part
+- everyone came up with their own separation logic with its own primitives and proof rules
+- positional paper 2010: CSL must be unified, a common framework s.t. ppl can focus on actually verifying things and not respin the metatheory every time
+* Enter Iris: CSL Unified
+- Iris is the unifying framework
+- the premise: Monoids + Invariants is all you need
+- neither idea is new, but Iris conveys how all of these previous works are some linear combination of Monoids + Invariants
+* Wdym Monoids + Invariants??
+** Where we are so far
+#+ATTR_REVEAL: :frag (appear)
+- have idea of what CSL is
+- know the context and goal of Iris
+- BUT
+  #+ATTR_REVEAL: :frag (appear)
+  + what kinds of proofs do we do in Iris?
+  + how exactly does the Iris logic look like?
+- let's answer this with an example
+** An example program
+#+ATTR_REVEAL: :frag (appear)
+- Consider instantiation of Iris with a \lambda-Calculus
+- Consider the following object:
+  #+begin_src c
+mk_oneshot := λ_.
+    let x = ref(inl(0)) in {
+      tryset = λn. CAS(x, inl(0), inr(n)),
+      check = λ_.
+        let y = !x in λ_.
+          match y,!x with
+            | inl(_),_      ⇒ ()
+            | inr(n),inl(_) ⇒ assert(false)
+            | inr(n),inr(m) ⇒ assert(n = m)
+          end
+    }
+  #+end_src
+- Prove the following CSL triple:
+\begin{aligned}
+  \{True\}\ mk\_oneshot\ ()\
+    \left\{
+      c.\forall v.
+      \begin{array}{l}
+        \{True\}\ c.tryset\ v\ \{w.w\in \{true,false\}\}\ * \\
+        {}
+        \{True\}\ c.check\ () \{f.\{True\}f\ ()\ \{True\}\}
+      \end{array}
+    \right\}
+\end{aligned}

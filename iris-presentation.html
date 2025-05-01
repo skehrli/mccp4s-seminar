@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Iris</title>
+<meta name="author" content="Xinglu & Sascha"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/moon.css" id="theme"/>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1 class="title">Iris</h1><h2 class="author">Xinglu &amp; Sascha</h2>
+</section>
+
+<section>
+<section id="slide-org9d350e0">
+<h2 id="org9d350e0">What is Iris?</h2>
+<div class="outline-text-2" id="text-org9d350e0">
+</div>
+</section>
+<section id="slide-orge8832b4">
+<h3 id="orge8832b4">Disclaimer</h3>
+<ul>
+<li class="fragment appear">Iris is not a small project</li>
+<li class="fragment appear">123 papers and 21 doctoral theses</li>
+<li class="fragment appear">Highly influential
+<ul>
+<li class="fragment appear">2023 Alonzo Church Award for Outstanding Contributions to Logic and Computation</li>
+<li class="fragment appear">2025 Most Influential POPL Paper Award
+<ul>
+<li>awarded for most influential paper of last decade</li>
+
+</ul></li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-orgffcd84b">
+<h3 id="orgffcd84b">Iris in one sentence</h3>
+<ul>
+<li class="fragment appear">Iris is a <b>generic higher-order concurrent separation logic</b>.</li>
+
+</ul>
+</section>
+<section id="slide-org4b80ade">
+<h3 id="org4b80ade">Iris in one (longer) sentence</h3>
+<p class="fragment (appear)">
+Iris is a framework for
+</p>
+<ul>
+<li class="fragment appear">foundational machine-checked proofs</li>
+<li class="fragment appear">of deep correctness properties</li>
+<li class="fragment appear">for fine-grained concurrent programs</li>
+<li class="fragment appear">in higher-order imperative languages</li>
+
+</ul>
+</section>
+<section id="slide-org26162db">
+<h3 id="org26162db">Some Notes</h3>
+<ul>
+<li class="fragment appear">formalized entirely in Rocq proof assistant</li>
+<li class="fragment appear">not tied to particular language semantics</li>
+<li class="fragment appear">example: type safety proof of (a realistic subset of) Rust formalized using Iris</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org28151d3">
+<h2 id="org28151d3">Who is behind Iris?</h2>
+
+<div id="org0d22f81" class="figure">
+<p><img src="images/2025-04-30_13-30-37_screenshot.png" alt="2025-04-30_13-30-37_screenshot.png" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3bf06b1">
+<h2 id="org3bf06b1">A Brief History of Separation logic</h2>
+<div class="outline-text-2" id="text-org3bf06b1">
+</div>
+</section>
+<section id="slide-org1333269">
+<h3 id="org1333269">What is Separation Logic?</h3>
+<ul>
+<li class="fragment appear">extension of Hoare Logic</li>
+<li class="fragment appear">allows reasoning about pointer-manipulating programs</li>
+<li class="fragment appear">initially introduced by O&rsquo;Hearn in 2001</li>
+<li class="fragment appear">later extended to CSL</li>
+<li class="fragment appear">solves two problems - Object Orientation and Concurrency</li>
+
+</ul>
+</section>
+<section id="slide-orgf7fdb2c">
+<h3 id="orgf7fdb2c">Motivation: Why Separation Logic?</h3>
+<ul>
+<li class="fragment appear"><p>
+Consider program:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c">  <span style="color: #c0caf5;">void</span> <span style="color: #7aa2f7;">f</span><span style="color: #a9b1d6;">(</span><span style="color: #c0caf5;">int</span>* <span style="color: #c0caf5;">x</span>, <span style="color: #c0caf5;">int</span>* <span style="color: #c0caf5;">y</span><span style="color: #a9b1d6;">)</span> <span style="color: #a9b1d6;">{</span>
+    *x = <span style="color: #ff9e64; font-weight: bold;">1</span>;
+    *y = <span style="color: #ff9e64; font-weight: bold;">2</span>;
+  <span style="color: #a9b1d6;">}</span>
+</pre>
+</div></li>
+<li class="fragment appear"><p>
+Naive Hoare logic spec:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c"><span style="color: #a9b1d6;">{</span> <span style="color: #ff9e64;">true</span> <span style="color: #a9b1d6;">}</span> f <span style="color: #a9b1d6;">{</span> *x == <span style="color: #ff9e64; font-weight: bold;">1</span> ^ *y == <span style="color: #ff9e64; font-weight: bold;">2</span> <span style="color: #a9b1d6;">}</span>
+</pre>
+</div></li>
+<li class="fragment appear">What if \(x == y\)? Spec becomes invalid!</li>
+<li class="fragment appear"><p>
+What we want instead:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c"><span style="color: #a9b1d6;">{</span> <span style="color: #9ece6a;">"x and y disjoint"</span> <span style="color: #a9b1d6;">}</span> f <span style="color: #a9b1d6;">{</span> *x == <span style="color: #ff9e64; font-weight: bold;">1</span> ^ *y == <span style="color: #ff9e64; font-weight: bold;">2</span> <span style="color: #a9b1d6;">}</span>
+</pre>
+</div></li>
+
+</ul>
+</section>
+<section id="slide-orgeb65f4d">
+<h3 id="orgeb65f4d">Separation Logic: Notation</h3>
+<ul>
+<li class="fragment appear">\(↦\) : points-to assertion (e.g., \(x ↦ 5\))</li>
+<li class="fragment appear">\(*\) : separating conjunction (asserts disjointness)</li>
+<li class="fragment appear"><p>
+Can now formulate this:
+</p>
+<div>
+\begin{aligned}
+\{ x ↦ \_ * y ↦ \_ \}\ f\ \{ x ↦ 1 * y ↦ 2 \}
+\end{aligned}
+
+</div></li>
+
+</ul>
+</section>
+<section id="slide-org25ea856">
+<h3 id="org25ea856">Semantics of \(*\)</h3>
+<div>
+\begin{aligned}
+(P * Q)(h) \iff \exists h_1, h_2.~ h = h_1 \uplus h_2 \land P(h_1) \land Q(h_2)
+\end{aligned}
+
+</div>
+<ul>
+<li class="fragment appear">\(P * Q\) holds if:
+<ul>
+<li>Heap can be split into disjoint parts \(h1,\ h2\)</li>
+<li>\(P\) holds on \(h1\), \(Q\) on \(h2\)</li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-org33a4f0d">
+<h3 id="org33a4f0d">Frame Rule</h3>
+<div>
+\begin{aligned}
+\frac{\{P\}~C~\{Q\}}{\{P * R\}~C~\{Q * R\}}
+\end{aligned}
+
+</div>
+
+<ul>
+<li class="fragment appear">Useful for local reasoning.</li>
+<li class="fragment appear">Add unaffected context \(R\) without changing correctness.</li>
+
+</ul>
+</section>
+<section id="slide-orgd48c0c1">
+<h3 id="orgd48c0c1">Conclusion thus far</h3>
+<ul>
+<li class="fragment appear">Convenient reasoning for shared heap where everyone operates on disjoint data</li>
+<li class="fragment appear">But at some point, there <b>will</b> be shared data</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgef7cee2">
+<h2 id="orgef7cee2">CSL: Reasoning about shared data</h2>
+<div class="outline-text-2" id="text-orgef7cee2">
+</div>
+</section>
+<section id="slide-org120e892">
+<h3 id="org120e892">Separation Logic &rarr; CSL: O&rsquo;Hearn 2007</h3>
+<ul>
+<li>O&rsquo;Hearns CSL = SL + resource invariants</li>
+<li>a quick example</li>
+<li>ppl liked this, avalanche of subsequent works</li>
+<li>problem: every new paper/library had a slightly different way about the shared data reasoning part</li>
+<li>everyone came up with their own separation logic with its own primitives and proof rules</li>
+<li>positional paper 2010: CSL must be unified, a common framework s.t. ppl can focus on actually verifying things and not respin the metatheory every time</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org60df507">
+<h2 id="org60df507">Enter Iris: CSL Unified</h2>
+<ul>
+<li>Iris is the unifying framework</li>
+<li>the premise: Monoids + Invariants is all you need</li>
+<li>neither idea is new, but Iris conveys how all of these previous works are some linear combination of Monoids + Invariants</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgabcd48b">
+<h2 id="orgabcd48b">Wdym Monoids + Invariants??</h2>
+<div class="outline-text-2" id="text-orgabcd48b">
+</div>
+</section>
+<section id="slide-org570a149">
+<h3 id="org570a149">Where we are so far</h3>
+<ul>
+<li class="fragment appear">have idea of what CSL is</li>
+<li class="fragment appear">know the context and goal of Iris</li>
+<li class="fragment appear">BUT
+<ul>
+<li class="fragment appear">what kinds of proofs do we do in Iris?</li>
+<li class="fragment appear">how exactly does the Iris logic look like?</li>
+
+</ul></li>
+<li class="fragment appear">let&rsquo;s answer this with an example</li>
+
+</ul>
+</section>
+<section id="slide-orgdb5f1a8">
+<h3 id="orgdb5f1a8">An example program</h3>
+<ul>
+<li class="fragment appear">Consider instantiation of Iris with a &lambda;-Calculus</li>
+<li class="fragment appear"><p>
+Consider the following object:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c"><span style="color: #ff9e64;">mk_oneshot</span> := &#955;_.
+    let x = ref<span style="color: #a9b1d6;">(</span>inl<span style="color: #7aa2f7;">(</span><span style="color: #ff9e64; font-weight: bold;">0</span><span style="color: #7aa2f7;">)</span><span style="color: #a9b1d6;">)</span> in <span style="color: #a9b1d6;">{</span>
+      tryset = &#955;n. <span style="color: #ff9e64;">CAS</span><span style="color: #7aa2f7;">(</span>x, inl<span style="color: #ff9e64;">(</span><span style="color: #ff9e64; font-weight: bold;">0</span><span style="color: #ff9e64;">)</span>, inr<span style="color: #ff9e64;">(</span>n<span style="color: #ff9e64;">)</span><span style="color: #7aa2f7;">)</span>,
+      check = &#955;_.
+        let y = <span style="color: #7dcfff; font-weight: bold;">!</span>x in &#955;_.
+          match y,<span style="color: #7dcfff; font-weight: bold;">!</span>x with
+            | inl<span style="color: #7aa2f7;">(</span>_<span style="color: #7aa2f7;">)</span>,_      &#8658; <span style="color: #7aa2f7;">()</span>
+            | inr<span style="color: #7aa2f7;">(</span>n<span style="color: #7aa2f7;">)</span>,inl<span style="color: #7aa2f7;">(</span>_<span style="color: #7aa2f7;">)</span> &#8658; assert<span style="color: #7aa2f7;">(</span><span style="color: #ff9e64;">false</span><span style="color: #7aa2f7;">)</span>
+            | inr<span style="color: #7aa2f7;">(</span>n<span style="color: #7aa2f7;">)</span>,inr<span style="color: #7aa2f7;">(</span>m<span style="color: #7aa2f7;">)</span> &#8658; assert<span style="color: #7aa2f7;">(</span>n = m<span style="color: #7aa2f7;">)</span>
+          end
+    <span style="color: #a9b1d6;">}</span>
+</pre>
+</div></li>
+<li class="fragment appear">Prove the following CSL triple:</li>
+
+</ul>
+<div>
+\begin{aligned}
+  \{True\}\ mk\_oneshot\ ()\
+    \left\{
+      c.\forall v.
+      \begin{array}{l}
+        \{True\}\ c.tryset\ v\ \{w.w\in \{true,false\}\}\ * \\
+        {}
+        \{True\}\ c.check\ () \{f.\{True\}f\ ()\ \{True\}\}
+      \end{array}
+    \right\}
+\end{aligned}
+
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/math/math.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+minScale: 1.00,
+maxScale: 1.00,
+
+transition: 'slide',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMath ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+});
+</script>
+</body>
+</html>
