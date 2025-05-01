@@ -43,7 +43,7 @@ Iris is a framework for
 :ID:       ab7c0539-4948-46c7-8fba-5591d366ef3a
 :END:
 #+attr_org: :width 600px
-[[file:images/2025-04-30_13-30-37_screenshot.png]]
+[[file:authors.png]]
 * A Brief History of Separation logic
 ** What is Separation Logic?
 #+ATTR_REVEAL: :frag (appear)

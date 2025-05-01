@@ -1,0 +1,3 @@
+* State
+- *CSL: Reasoning about shared data*, *Enter Iris*, and *Monoids + Invariants* sections atm are just list of bullet points of the contents they should have
+- atm, I'm working on explaining Iris with an example program in the section *Monoids + Invariants*
