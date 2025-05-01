@@ -19,13 +19,13 @@
 </section>
 
 <section>
-<section id="slide-org9d350e0">
-<h2 id="org9d350e0">What is Iris?</h2>
-<div class="outline-text-2" id="text-org9d350e0">
+<section id="slide-org94f81e7">
+<h2 id="org94f81e7">What is Iris?</h2>
+<div class="outline-text-2" id="text-org94f81e7">
 </div>
 </section>
-<section id="slide-orge8832b4">
-<h3 id="orge8832b4">Disclaimer</h3>
+<section id="slide-orgf158758">
+<h3 id="orgf158758">Disclaimer</h3>
 <ul>
 <li class="fragment appear">Iris is not a small project</li>
 <li class="fragment appear">123 papers and 21 doctoral theses</li>
@@ -42,15 +42,15 @@
 
 </ul>
 </section>
-<section id="slide-orgffcd84b">
-<h3 id="orgffcd84b">Iris in one sentence</h3>
+<section id="slide-orge3ddf2b">
+<h3 id="orge3ddf2b">Iris in one sentence</h3>
 <ul>
 <li class="fragment appear">Iris is a <b>generic higher-order concurrent separation logic</b>.</li>
 
 </ul>
 </section>
-<section id="slide-org4b80ade">
-<h3 id="org4b80ade">Iris in one (longer) sentence</h3>
+<section id="slide-org53c09b5">
+<h3 id="org53c09b5">Iris in one (longer) sentence</h3>
 <p class="fragment (appear)">
 Iris is a framework for
 </p>
@@ -62,8 +62,8 @@ Iris is a framework for
 
 </ul>
 </section>
-<section id="slide-org26162db">
-<h3 id="org26162db">Some Notes</h3>
+<section id="slide-org7624dd5">
+<h3 id="org7624dd5">Some Notes</h3>
 <ul>
 <li class="fragment appear">formalized entirely in Rocq proof assistant</li>
 <li class="fragment appear">not tied to particular language semantics</li>
@@ -73,23 +73,23 @@ Iris is a framework for
 </section>
 </section>
 <section>
-<section id="slide-org28151d3">
-<h2 id="org28151d3">Who is behind Iris?</h2>
+<section id="slide-org372dc94">
+<h2 id="org372dc94">Who is behind Iris?</h2>
 
-<div id="org0d22f81" class="figure">
-<p><img src="images/2025-04-30_13-30-37_screenshot.png" alt="2025-04-30_13-30-37_screenshot.png" />
+<div id="orgaedb86e" class="figure">
+<p><img src="authors.png" alt="authors.png" />
 </p>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org3bf06b1">
-<h2 id="org3bf06b1">A Brief History of Separation logic</h2>
-<div class="outline-text-2" id="text-org3bf06b1">
+<section id="slide-org77bcf42">
+<h2 id="org77bcf42">A Brief History of Separation logic</h2>
+<div class="outline-text-2" id="text-org77bcf42">
 </div>
 </section>
-<section id="slide-org1333269">
-<h3 id="org1333269">What is Separation Logic?</h3>
+<section id="slide-org79b6488">
+<h3 id="org79b6488">What is Separation Logic?</h3>
 <ul>
 <li class="fragment appear">extension of Hoare Logic</li>
 <li class="fragment appear">allows reasoning about pointer-manipulating programs</li>
@@ -99,8 +99,8 @@ Iris is a framework for
 
 </ul>
 </section>
-<section id="slide-orgf7fdb2c">
-<h3 id="orgf7fdb2c">Motivation: Why Separation Logic?</h3>
+<section id="slide-org9c46501">
+<h3 id="org9c46501">Motivation: Why Separation Logic?</h3>
 <ul>
 <li class="fragment appear"><p>
 Consider program:
@@ -133,8 +133,8 @@ What we want instead:
 
 </ul>
 </section>
-<section id="slide-orgeb65f4d">
-<h3 id="orgeb65f4d">Separation Logic: Notation</h3>
+<section id="slide-orgc7edc4d">
+<h3 id="orgc7edc4d">Separation Logic: Notation</h3>
 <ul>
 <li class="fragment appear">\(↦\) : points-to assertion (e.g., \(x ↦ 5\))</li>
 <li class="fragment appear">\(*\) : separating conjunction (asserts disjointness)</li>
@@ -150,8 +150,8 @@ Can now formulate this:
 
 </ul>
 </section>
-<section id="slide-org25ea856">
-<h3 id="org25ea856">Semantics of \(*\)</h3>
+<section id="slide-org8809dcd">
+<h3 id="org8809dcd">Semantics of \(*\)</h3>
 <div>
 \begin{aligned}
 (P * Q)(h) \iff \exists h_1, h_2.~ h = h_1 \uplus h_2 \land P(h_1) \land Q(h_2)
@@ -168,8 +168,8 @@ Can now formulate this:
 
 </ul>
 </section>
-<section id="slide-org33a4f0d">
-<h3 id="org33a4f0d">Frame Rule</h3>
+<section id="slide-orgccbea0d">
+<h3 id="orgccbea0d">Frame Rule</h3>
 <div>
 \begin{aligned}
 \frac{\{P\}~C~\{Q\}}{\{P * R\}~C~\{Q * R\}}
@@ -183,8 +183,8 @@ Can now formulate this:
 
 </ul>
 </section>
-<section id="slide-orgd48c0c1">
-<h3 id="orgd48c0c1">Conclusion thus far</h3>
+<section id="slide-org8cc9e6a">
+<h3 id="org8cc9e6a">Conclusion thus far</h3>
 <ul>
 <li class="fragment appear">Convenient reasoning for shared heap where everyone operates on disjoint data</li>
 <li class="fragment appear">But at some point, there <b>will</b> be shared data</li>
@@ -193,13 +193,13 @@ Can now formulate this:
 </section>
 </section>
 <section>
-<section id="slide-orgef7cee2">
-<h2 id="orgef7cee2">CSL: Reasoning about shared data</h2>
-<div class="outline-text-2" id="text-orgef7cee2">
+<section id="slide-org1f13f45">
+<h2 id="org1f13f45">CSL: Reasoning about shared data</h2>
+<div class="outline-text-2" id="text-org1f13f45">
 </div>
 </section>
-<section id="slide-org120e892">
-<h3 id="org120e892">Separation Logic &rarr; CSL: O&rsquo;Hearn 2007</h3>
+<section id="slide-orgb39438b">
+<h3 id="orgb39438b">Separation Logic &rarr; CSL: O&rsquo;Hearn 2007</h3>
 <ul>
 <li>O&rsquo;Hearns CSL = SL + resource invariants</li>
 <li>a quick example</li>
@@ -212,8 +212,8 @@ Can now formulate this:
 </section>
 </section>
 <section>
-<section id="slide-org60df507">
-<h2 id="org60df507">Enter Iris: CSL Unified</h2>
+<section id="slide-org4035816">
+<h2 id="org4035816">Enter Iris: CSL Unified</h2>
 <ul>
 <li>Iris is the unifying framework</li>
 <li>the premise: Monoids + Invariants is all you need</li>
@@ -223,13 +223,13 @@ Can now formulate this:
 </section>
 </section>
 <section>
-<section id="slide-orgabcd48b">
-<h2 id="orgabcd48b">Wdym Monoids + Invariants??</h2>
-<div class="outline-text-2" id="text-orgabcd48b">
+<section id="slide-org527c899">
+<h2 id="org527c899">Wdym Monoids + Invariants??</h2>
+<div class="outline-text-2" id="text-org527c899">
 </div>
 </section>
-<section id="slide-org570a149">
-<h3 id="org570a149">Where we are so far</h3>
+<section id="slide-orgc195189">
+<h3 id="orgc195189">Where we are so far</h3>
 <ul>
 <li class="fragment appear">have idea of what CSL is</li>
 <li class="fragment appear">know the context and goal of Iris</li>
@@ -243,8 +243,8 @@ Can now formulate this:
 
 </ul>
 </section>
-<section id="slide-orgdb5f1a8">
-<h3 id="orgdb5f1a8">An example program</h3>
+<section id="slide-orgbd874a6">
+<h3 id="orgbd874a6">An example program</h3>
 <ul>
 <li class="fragment appear">Consider instantiation of Iris with a &lambda;-Calculus</li>
 <li class="fragment appear"><p>
