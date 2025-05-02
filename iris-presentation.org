@@ -122,6 +122,61 @@ Iris is a framework for
   + what kinds of proofs do we do in Iris?
   + how exactly does the Iris logic look like?
 - let's answer this with an example
+
+** Invariants
+- Allow us to reason about shared state
+- Notation: \(\boxed{R}\)
+- Duplicatable: \(\boxed{R} \vdash \boxed{R} \ast \boxed{R}\)
+
+*** Working with Invariants
+\[
+\frac{\left\{ R \ast P \right\} \ e \ \left\{ R \ast Q \right\} \qquad e
+\text{ atomic} }{\left\{ \boxed{R} \ast P \right\} \ e \ \left\{ \boxed{R} \ast Q \right\} }
+\]
+
+- Invariant rule
+   #+ATTR_REVEAL: :frag (appear)
+  + Open invariant to acquire temporary ownership of shared resource
+  + Once invariant is reestablished, it can be closed again
+
+*** Working with Invariants (cont'd)
+\[
+\frac{\left\{ \boxed{R} \ast P \right\} \ e \ \left\{ Q \right\}
+}{\left\{ R \ast P \right\} \ e \ \left\{ Q \right\} }
+\]
+
+- Allocation rule
+   #+ATTR_REVEAL: :frag (appear)
+   - Create invariant and give up ownership of \(R\)
+       
+*** Monoids
+#+ATTR_REVEAL: :frag (appear)
+- Ghost state
+   #+ATTR_REVEAL: :frag (appear)
+  + Purely logical, unrelated from the physical state of the program
+  + Keep track of history of computation
+- Modelled as a /partial commutative monoid/ (PCM)
+- Set \(\lvert M \rvert \) with a zero \(\bot\), unit \(\epsilon\),
+  binary operation \(\cdot \)
+  #+ATTR_REVEAL: :frag (appear)
+  - \(a \cdot b = b \cdot a\)
+  - \(\epsilon \cdot a = a \)
+  - \((a \cdot b) \cdot c = a \cdot (b \cdot c)\)
+  - \(\bot \cdot a = \bot\)
+  - \(\bot \neq \epsilon\)
+    
+*** Example
+#+ATTR_REVEAL: :frag (appear)
+#+begin_src c
+{ l ↦ n }
+l ← addOne(l) ‖ l ← addOne(l)
+!l
+{ v. v ≥ n + 1 }
+#+end_src
+
+- where =addOne(l)= is an atomic version of =!l + 1=.
+
+
 ** An example program
 #+ATTR_REVEAL: :frag (appear)
 - Consider instantiation of Iris with a \lambda-Calculus
