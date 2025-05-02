@@ -94,8 +94,19 @@ Iris is a framework for
 \end{aligned}
 
 #+ATTR_REVEAL: :frag (appear)
-- Useful for local reasoning.
-- Add unaffected context $R$ without changing correctness.
+- Simple, but encapsulates "ownership reasoning" of separation logic.
+- Only possible because of ownership semantics of points-to assertion.
+- example:
+  \begin{aligned}
+  \{x ↦ 0\}\ y := new\ (42)\ \{x ↦ 0 * y ↦ 42\}
+  \end{aligned}
+** SL \to CSL
+#+ATTR_REVEAL: :frag (appear)
+- Add parallel execution $\parallel$ (e.g. $C_1 \parallel C_2$)
+- And this simple rule (parallel composition):
+  \begin{aligned}
+  \frac{\{P_1\}~C_1~\{Q_1\}\ldots \{P_n\}~C_n~\{Q_n\}}{\{P_1 * \ldots * P_n\}~C_1\parallel\ldots\parallel C_n~\{Q_1 * \ldots * Q_n\}}
+  \end{aligned}
 ** Conclusion thus far
 #+ATTR_REVEAL: :frag (appear)
 - Convenient reasoning for shared heap where everyone operates on disjoint data
