@@ -63,27 +63,21 @@ Iris is a framework for
   #+END_SRC
 - Naive Hoare logic spec:
   #+begin_src c
-{ true } f(x, y) { *x == 1 ^ *y == 2 }
+{ true } f { *x == 1 ^ *y == 2 }
   #+end_src
 - What if $x == y$? Spec becomes invalid!
 - What we want instead:
   #+begin_src c
-{ "x and y disjoint" } f(x, y) { *x == 1 ^ *y == 2 }
+{ "x and y disjoint" } f { *x == 1 ^ *y == 2 }
   #+end_src
 
 ** Separation Logic: Notation
 #+ATTR_REVEAL: :frag (appear)
- - $↦$ : points-to assertion (e.g. $x ↦ 5$)
-   #+ATTR_REVEAL: :frag (appear)
-   - memory location with name x has value 5
-   - assertion provides exclusive ownership over x
- - $*$ : separating conjunction (e.g. $P * Q$)
-   #+ATTR_REVEAL: :frag (appear)
-   - like $P \land Q$
-   - BUT P and Q must be satisfied in non-intersecting parts of heap
+ - $↦$ : points-to assertion (e.g., $x ↦ 5$)
+ - $*$ : separating conjunction (asserts disjointness)
  - Can now formulate this:
         \begin{aligned}
-        \{ x ↦ v_1 * y ↦ v_2 \}\ f(x, y)\ \{ x ↦ 1 * y ↦ 2 \}
+        \{ x ↦ \_ * y ↦ \_ \}\ f\ \{ x ↦ 1 * y ↦ 2 \}
         \end{aligned}
 ** Semantics of $*$
 \begin{aligned}
@@ -100,12 +94,8 @@ Iris is a framework for
 \end{aligned}
 
 #+ATTR_REVEAL: :frag (appear)
-- Simple, but encapsulates "ownership reasoning" of separation logic.
-- Only possible because of ownership semantics of points-to assertion.
-- example:
-  \begin{aligned}
-  \{x ↦ 0\}\ y := new\ (42)\ \{x ↦ 0 * y ↦ 42\}
-  \end{aligned}
+- Useful for local reasoning.
+- Add unaffected context $R$ without changing correctness.
 ** Conclusion thus far
 #+ATTR_REVEAL: :frag (appear)
 - Convenient reasoning for shared heap where everyone operates on disjoint data
@@ -166,26 +156,46 @@ Iris is a framework for
   + Purely logical, unrelated from the physical state of the program
   + Keep track of history of computation
 - Modelled as a /partial commutative monoid/ (PCM)
+   + Taken as parameter of the logic
 - Set \(\lvert M \rvert \) with a zero \(\bot\), unit \(\epsilon\),
   binary operation \(\cdot \)
   #+ATTR_REVEAL: :frag (appear)
-  - \(a \cdot b = b \cdot a\)
-  - \(\epsilon \cdot a = a \)
-  - \((a \cdot b) \cdot c = a \cdot (b \cdot c)\)
-  - \(\bot \cdot a = \bot\)
-  - \(\bot \neq \epsilon\)
-    
-*** Example
+  + \(a \cdot b = b \cdot a\)
+  + \(\epsilon \cdot a = a \)
+  + \((a \cdot b) \cdot c = a \cdot (b \cdot c)\)
+  + \(\bot \cdot a = \bot\)
+  + \(\bot \neq \epsilon\)
+
+*** Ghost state
 #+ATTR_REVEAL: :frag (appear)
+- For element \(a\) in Monoid, exists corresponding ghost
+  assertion \(\boxed{a}_{g}\)
+  + Asserts \(a \neq \bot\) & ownership of an \(a\) fragment of
+    the global ghost state
+- Can update global ghost state using /view shifts/
+   + \(P \Rrightarrow Q\): Can update the state from \(P\) to \(Q\) without
+     changing program state
+- Ghost resources can be split and combined arbitrarily: \(\boxed{t \cdot
+  u}_{g} \iff  \boxed{t}_{g} \ast \boxed{u}_{g}\)
+
+*** Example
 #+begin_src c
 { l ↦ n }
 l ← addOne(l) ‖ l ← addOne(l)
 !l
-{ v. v ≥ n + 1 }
+{ v. v = n + 2 }
 #+end_src
 
-- where =addOne(l)= is an atomic version of =!l + 1=.
-
+#+ATTR_REVEAL: :frag (appear)
+- Use the /authoritative monoid/
+   #+ATTR_REVEAL: :frag (appear)
+  + One owns the global authoritative state of ghost resource
+  + Everyone else owns fragments of resource
+  + Ghost variables come in pairs \(\gamma \hookrightarrow_{\bullet} n \ast \gamma    \hookrightarrow_{\circ} n\)
+- Invariant: \(\exists n_{1}, n_{2}. (n_{1} + n_{2}) \ast \gamma_{1} \hookrightarrow_{\bullet} n_{1} \ast
+  \gamma_{2} \hookrightarrow n_{2}\)
+  
+*** Example
 
 ** An example program
 #+ATTR_REVEAL: :frag (appear)
@@ -204,17 +214,15 @@ mk_oneshot := λ_.
           end
     }
   #+end_src
-- We want to prove the following CSL triple:
-        #+REVEAL_HTML: <span style="font-size:70%">
-        \begin{aligned}
-        \{True\}\ mk\_oneshot\ ()\
-        \left\{
-        c.\forall v.
-        \begin{array}{l}
-                \{True\}\ c.tryset\ v\ \{w.w\in \{true,false\}\}\ * \\
-                {}
-                \{True\}\ c.check\ () \{f.\{True\}f\ ()\ \{True\}\}
-        \end{array}
-        \right\}
-        \end{aligned}
-        #+REVEAL_HTML: </span>
+- Prove the following CSL triple:
+\begin{aligned}
+  \{True\}\ mk\_oneshot\ ()\
+    \left\{
+      c.\forall v.
+      \begin{array}{l}
+        \{True\}\ c.tryset\ v\ \{w.w\in \{true,false\}\}\ * \\
+        {}
+        \{True\}\ c.check\ () \{f.\{True\}f\ ()\ \{True\}\}
+      \end{array}
+    \right\}
+\end{aligned}
