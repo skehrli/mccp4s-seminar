@@ -117,16 +117,24 @@ Iris is a framework for
 - Convenient reasoning for shared heap where everyone operates on disjoint data
 - But at some point, there *will* be shared data
 ** CSL: Reasoning about shared data
-- O'Hearns CSL = SL + resource invariants
-- a quick example
-- ppl liked this, avalanche of subsequent works
-- problem: every new paper/library had a slightly different way about the shared data reasoning part
-- everyone came up with their own separation logic with its own primitives and proof rules
-- positional paper 2010: CSL must be unified, a common framework s.t. ppl can focus on actually verifying things and not respin the metatheory every time
+#+ATTR_REVEAL: :frag (appear)
+- O'Hearns original CSL = SL + $\parallel$ + *resource invariants*
+- critical region rule:
+  \begin{aligned}
+  \frac{\{(P * RI_r) \land B\}~C~\{Q * RI_r\}}{\{P\}~with\ r\ when\ B\ do\ C~\{Q\}}
+  \end{aligned}
+- shifts proof burden to coming up with a good resource invariant
+** Where are we now?
+#+ATTR_REVEAL: :frag (appear)
+- ppl impressed by capabilities of CSL, avalanche of subsequent work follows
+- problem: every new paper/library has slightly different way about shared resource reasoning part
+- everyone came up with own separation logic with own primitives and proof rules
+- Parkinson, 2010: CSL must be unified, a common framework s.t. ppl can focus on actually verifying things and not respin metatheory each time
 * Enter Iris: CSL Unified
+#+ATTR_REVEAL: :frag (appear)
 - Iris is the unifying framework
 - the premise: Monoids + Invariants is all you need
-- neither idea is new, but Iris conveys how all of these previous works are some linear combination of Monoids + Invariants
+- neither idea new, but presented as unification of previous approaches
 * Wdym Monoids + Invariants??
 ** Where we are so far
 #+ATTR_REVEAL: :frag (appear)
