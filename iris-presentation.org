@@ -196,11 +196,28 @@ Iris is a framework for
   assertion \(\boxed{a}_{g}\)
   + Asserts \(a \neq \bot\) & ownership of an \(a\) fragment of
     the global ghost state
-- Can update global ghost state using /view shifts/
+- Can update global ghost state
+   + Expressed as /view shifts/
    + \(P \Rrightarrow Q\): Can update the state from \(P\) to \(Q\) without
      changing program state
 - Ghost resources can be split and combined arbitrarily: \(\boxed{t \cdot
   u}_{g} \iff  \boxed{t}_{g} \ast \boxed{u}_{g}\)
+
+*** Ghost state
+\[
+\frac{a \rightsquigarrow B}{\boxed{a}_{g} \Rrightarrow \exists b \in B. \boxed{b}_{g}}
+\]
+
+#+ATTR_REVEAL: :frag (appear)
+- \(a \rightsquigarrow B\) is shortand for \(\Box \forall a_{f}.  \ a
+  \cdot a_{f} \neq \bot \implies \exists b \in B. \ b \cdot a_{f} \neq
+  \bot\)
+- Always modality \(\Box P\)
+  + \(P\) holds; does not assert ownership
+  + Duplicatable
+- Frame update rule
+  + State obtained by composing the contributions of all threads is a
+    valid element (not \(\bot\))
 
 *** Example
 #+begin_src c
@@ -213,12 +230,12 @@ l ← addOne(l) ‖ l ← addOne(l)
 #+ATTR_REVEAL: :frag (appear)
 - Use the /authoritative monoid/
    #+ATTR_REVEAL: :frag (appear)
+  + Ghost variables come in pairs \(\gamma \hookrightarrow_{\bullet} n \ast \gamma    \hookrightarrow_{\circ} n\)
   + One owns the global authoritative state of ghost resource
   + Everyone else owns fragments of resource
-  + Ghost variables come in pairs \(\gamma \hookrightarrow_{\bullet} n \ast \gamma    \hookrightarrow_{\circ} n\)
 - Invariant: \(\exists n_{1}, n_{2}. (n_{1} + n_{2}) \ast \gamma_{1} \hookrightarrow_{\bullet} n_{1} \ast
-  \gamma_{2} \hookrightarrow n_{2}\)
-  
+  \gamma_{2} \hookrightarrow_{\bullet} n_{2}\)
+
 *** Example
 
 ** An example program
