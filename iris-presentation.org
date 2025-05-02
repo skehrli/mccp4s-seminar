@@ -105,7 +105,7 @@ Iris is a framework for
   \begin{aligned}
   \{x ↦ 0\}\ y := new\ (42)\ \{x ↦ 0 * y ↦ 42\}
   \end{aligned}
-** SL \to CSL
+** SL \to CSL (O'Hearn, 2007)
 #+ATTR_REVEAL: :frag (appear)
 - Add parallel execution $\parallel$ (e.g. $C_1 \parallel C_2$)
 - And this simple rule (parallel composition):
@@ -116,8 +116,7 @@ Iris is a framework for
 #+ATTR_REVEAL: :frag (appear)
 - Convenient reasoning for shared heap where everyone operates on disjoint data
 - But at some point, there *will* be shared data
-* CSL: Reasoning about shared data
-** Separation Logic \to CSL: O'Hearn 2007
+** CSL: Reasoning about shared data
 - O'Hearns CSL = SL + resource invariants
 - a quick example
 - ppl liked this, avalanche of subsequent works
