@@ -124,13 +124,15 @@ Iris is a framework for
   \frac{\{(P * RI_r) \land B\}~C~\{Q * RI_r\}}{\{P\}~with\ r\ when\ B\ do\ C~\{Q\}}
   \end{aligned}
 - shifts proof burden to coming up with a good resource invariant
+- paper included correctness proof for simple concurrent queue
 ** Where are we now?
 #+ATTR_REVEAL: :frag (appear)
 - ppl impressed by capabilities of CSL, avalanche of subsequent work follows
 - problem: every new paper/library has slightly different way about shared resource reasoning part
 - everyone came up with own separation logic with own primitives and proof rules
-- Parkinson, 2010: CSL must be unified, a common framework s.t. ppl can focus on actually verifying things and not respin metatheory each time
-* Enter Iris: CSL Unified
+- Parkinson, 2010: CSL must be unified in a common framework
+ - ppl can focus on actually verifying things
+* Enter Iris: CSL Unified (Jung, 2015)
 #+ATTR_REVEAL: :frag (appear)
 - Iris is the unifying framework
 - the premise: Monoids + Invariants is all you need
@@ -145,7 +147,6 @@ Iris is a framework for
   + what kinds of proofs do we do in Iris?
   + how exactly does the Iris logic look like?
 - let's answer this with an example
-
 ** Invariants
 - Allow us to reason about shared state
 - Notation: \(\boxed{R}\)
