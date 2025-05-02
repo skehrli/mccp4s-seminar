@@ -63,30 +63,35 @@ Iris is a framework for
   #+END_SRC
 - Naive Hoare logic spec:
   #+begin_src c
-{ true } f { *x == 1 ^ *y == 2 }
+{ true } f(x, y) { *x == 1 ^ *y == 2 }
   #+end_src
 - What if $x == y$? Spec becomes invalid!
 - What we want instead:
   #+begin_src c
-{ "x and y disjoint" } f { *x == 1 ^ *y == 2 }
+{ "x and y disjoint" } f(x, y) { *x == 1 ^ *y == 2 }
   #+end_src
 
 ** Separation Logic: Notation
 #+ATTR_REVEAL: :frag (appear)
- - $↦$ : points-to assertion (e.g., $x ↦ 5$)
- - $*$ : separating conjunction (asserts disjointness)
+ - $↦$ : points-to assertion (e.g. $x ↦ 5$)
+   #+ATTR_REVEAL: :frag (appear)
+   - memory location with name x has value 5
+   - assertion provides exclusive ownership over x
+ - $*$ : separating conjunction (e.g. $P * Q$)
+   #+ATTR_REVEAL: :frag (appear)
+   - like $P \land Q$
+   - BUT P and Q must be satisfied in non-intersecting parts of heap
  - Can now formulate this:
         \begin{aligned}
-        \{ x ↦ \_ * y ↦ \_ \}\ f\ \{ x ↦ 1 * y ↦ 2 \}
+        \{ x ↦ v_1 * y ↦ v_2 \}\ f(x, y)\ \{ x ↦ 1 * y ↦ 2 \}
         \end{aligned}
 ** Semantics of $*$
 \begin{aligned}
 (P * Q)(h) \iff \exists h_1, h_2.~ h = h_1 \uplus h_2 \land P(h_1) \land Q(h_2)
 \end{aligned}
 #+ATTR_REVEAL: :frag (appear)
-- $P * Q$ holds if:
-  - Heap can be split into disjoint parts $h1,\ h2$
-  - $P$ holds on $h1$, $Q$ on $h2$
+- Heap can be split into disjoint parts $h1,\ h2$
+- $P$ holds on $h1$, $Q$ on $h2$
 
 ** Frame Rule
 \begin{aligned}
@@ -226,14 +231,16 @@ mk_oneshot := λ_.
     }
   #+end_src
 - Prove the following CSL triple:
-\begin{aligned}
+  #+REVEAL_HTML: <span style="font-size:70%">
+  \begin{aligned}
   \{True\}\ mk\_oneshot\ ()\
-    \left\{
-      c.\forall v.
-      \begin{array}{l}
-        \{True\}\ c.tryset\ v\ \{w.w\in \{true,false\}\}\ * \\
-        {}
-        \{True\}\ c.check\ () \{f.\{True\}f\ ()\ \{True\}\}
-      \end{array}
-    \right\}
-\end{aligned}
+  \left\{
+  c.\forall v.
+  \begin{array}{l}
+          \{True\}\ c.tryset\ v\ \{w.w\in \{true,false\}\}\ * \\
+          {}
+          \{True\}\ c.check\ () \{f.\{True\}f\ ()\ \{True\}\}
+  \end{array}
+  \right\}
+  \end{aligned}
+  #+REVEAL_HTML: </span>
