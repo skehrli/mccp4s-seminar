@@ -19,13 +19,13 @@
 </section>
 
 <section>
-<section id="slide-org1c95717">
-<h2 id="org1c95717">What is Iris?</h2>
-<div class="outline-text-2" id="text-org1c95717">
+<section id="slide-orgdecb2cc">
+<h2 id="orgdecb2cc">What is Iris?</h2>
+<div class="outline-text-2" id="text-orgdecb2cc">
 </div>
 </section>
-<section id="slide-orgc8e2470">
-<h3 id="orgc8e2470">Disclaimer</h3>
+<section id="slide-org8f483e9">
+<h3 id="org8f483e9">Disclaimer</h3>
 <ul>
 <li class="fragment appear">Iris is not a small project</li>
 <li class="fragment appear">123 papers and 21 doctoral theses</li>
@@ -42,15 +42,15 @@
 
 </ul>
 </section>
-<section id="slide-org46053cc">
-<h3 id="org46053cc">Iris in one sentence</h3>
+<section id="slide-org0b14aa3">
+<h3 id="org0b14aa3">Iris in one sentence</h3>
 <ul>
 <li class="fragment appear">Iris is a <b>generic higher-order concurrent separation logic</b>.</li>
 
 </ul>
 </section>
-<section id="slide-orgd8ff573">
-<h3 id="orgd8ff573">Iris in one (longer) sentence</h3>
+<section id="slide-orgd803056">
+<h3 id="orgd803056">Iris in one (longer) sentence</h3>
 <p class="fragment (appear)">
 Iris is a framework for
 </p>
@@ -62,8 +62,8 @@ Iris is a framework for
 
 </ul>
 </section>
-<section id="slide-orga50704a">
-<h3 id="orga50704a">Some Notes</h3>
+<section id="slide-org2b8cba0">
+<h3 id="org2b8cba0">Some Notes</h3>
 <ul>
 <li class="fragment appear">formalized entirely in Rocq proof assistant</li>
 <li class="fragment appear">not tied to particular language semantics</li>
@@ -73,44 +73,44 @@ Iris is a framework for
 </section>
 </section>
 <section>
-<section id="slide-orgfbe1c84">
-<h2 id="orgfbe1c84">Who is behind Iris?</h2>
+<section id="slide-org965320c">
+<h2 id="org965320c">Who is behind Iris?</h2>
 
-<div id="org12663f2" class="figure">
+<div id="orgd92dc11" class="figure">
 <p><img src="authors.png" alt="authors.png" />
 </p>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgc6807a0">
-<h2 id="orgc6807a0">A Brief History of Separation logic</h2>
-<div class="outline-text-2" id="text-orgc6807a0">
+<section id="slide-org72aea53">
+<h2 id="org72aea53">A Brief History of Separation logic</h2>
+<div class="outline-text-2" id="text-org72aea53">
 </div>
 </section>
-<section id="slide-org4d371cf">
-<h3 id="org4d371cf">What is Separation Logic?</h3>
+<section id="slide-orge6d9824">
+<h3 id="orge6d9824">What is Separation Logic?</h3>
 <ul>
 <li class="fragment appear">extension of Hoare Logic</li>
 <li class="fragment appear">allows reasoning about pointer-manipulating programs</li>
-<li class="fragment appear">initially introduced by O'Hearn in 2001</li>
+<li class="fragment appear">initially introduced by O&rsquo;Hearn in 2001</li>
 <li class="fragment appear">later extended to CSL</li>
 <li class="fragment appear">solves two problems - Object Orientation and Concurrency</li>
 
 </ul>
 </section>
-<section id="slide-org65a65fa">
-<h3 id="org65a65fa">Motivation: Why Separation Logic?</h3>
+<section id="slide-orgc1c2866">
+<h3 id="orgc1c2866">Motivation: Why Separation Logic?</h3>
 <ul>
 <li class="fragment appear"><p>
 Consider program:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-c"><span style="color: #005f5f;">void</span> <span style="color: #721045;">f</span><span style="color: #000000;">(</span><span style="color: #005f5f;">int</span>* <span style="color: #005e8b;">x</span>, <span style="color: #005f5f;">int</span>* <span style="color: #005e8b;">y</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span>
-  *x = 1;
-  *y = 2;
-<span style="color: #000000;">}</span>
+<pre class="src src-c">  <span style="color: #c0caf5;">void</span> <span style="color: #7aa2f7;">f</span><span style="color: #a9b1d6;">(</span><span style="color: #c0caf5;">int</span>* <span style="color: #c0caf5;">x</span>, <span style="color: #c0caf5;">int</span>* <span style="color: #c0caf5;">y</span><span style="color: #a9b1d6;">)</span> <span style="color: #a9b1d6;">{</span>
+    *x = <span style="color: #ff9e64; font-weight: bold;">1</span>;
+    *y = <span style="color: #ff9e64; font-weight: bold;">2</span>;
+  <span style="color: #a9b1d6;">}</span>
 </pre>
 </div></li>
 <li class="fragment appear"><p>
@@ -118,7 +118,7 @@ Naive Hoare logic spec:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-c"><span style="color: #000000;">{</span> <span style="color: #0000b0;">true</span> <span style="color: #000000;">}</span> f <span style="color: #000000;">{</span> *x == 1 ^ *y == 2 <span style="color: #000000;">}</span>
+<pre class="src src-c"><span style="color: #a9b1d6;">{</span> <span style="color: #ff9e64;">true</span> <span style="color: #a9b1d6;">}</span> <span style="color: #7aa2f7;">f</span><span style="color: #a9b1d6;">(</span>x, y<span style="color: #a9b1d6;">)</span> <span style="color: #a9b1d6;">{</span> *x == <span style="color: #ff9e64; font-weight: bold;">1</span> ^ *y == <span style="color: #ff9e64; font-weight: bold;">2</span> <span style="color: #a9b1d6;">}</span>
 </pre>
 </div></li>
 <li class="fragment appear">What if \(x == y\)? Spec becomes invalid!</li>
@@ -127,31 +127,41 @@ What we want instead:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-c"><span style="color: #000000;">{</span> <span style="color: #3548cf;">"x and y disjoint"</span> <span style="color: #000000;">}</span> f <span style="color: #000000;">{</span> *x == 1 ^ *y == 2 <span style="color: #000000;">}</span>
+<pre class="src src-c"><span style="color: #a9b1d6;">{</span> <span style="color: #9ece6a;">"x and y disjoint"</span> <span style="color: #a9b1d6;">}</span> <span style="color: #7aa2f7;">f</span><span style="color: #a9b1d6;">(</span>x, y<span style="color: #a9b1d6;">)</span> <span style="color: #a9b1d6;">{</span> *x == <span style="color: #ff9e64; font-weight: bold;">1</span> ^ *y == <span style="color: #ff9e64; font-weight: bold;">2</span> <span style="color: #a9b1d6;">}</span>
 </pre>
 </div></li>
 
 </ul>
 </section>
-<section id="slide-org4ec24f1">
-<h3 id="org4ec24f1">Separation Logic: Notation</h3>
+<section id="slide-orgb9eaf50">
+<h3 id="orgb9eaf50">Separation Logic: Notation</h3>
 <ul>
-<li class="fragment appear">\(↦\) : points-to assertion (e.g., \(x ↦ 5\))</li>
-<li class="fragment appear">\(*\) : separating conjunction (asserts disjointness)</li>
+<li class="fragment appear">\(↦\) : points-to assertion (e.g. \(x ↦ 5\))
+<ul>
+<li class="fragment appear">memory location with name x has value 5</li>
+<li class="fragment appear">assertion provides exclusive ownership over x</li>
+
+</ul></li>
+<li class="fragment appear">\(*\) : separating conjunction (e.g. \(P * Q\))
+<ul>
+<li class="fragment appear">like \(P \land Q\)</li>
+<li class="fragment appear">BUT P and Q must be satisfied in non-intersecting parts of heap</li>
+
+</ul></li>
 <li class="fragment appear"><p>
 Can now formulate this:
 </p>
 <div>
 \begin{aligned}
-\{ x ↦ \_ * y ↦ \_ \}\ f\ \{ x ↦ 1 * y ↦ 2 \}
+\{ x ↦ v_1 * y ↦ v_2 \}\ f(x, y)\ \{ x ↦ 1 * y ↦ 2 \}
 \end{aligned}
 
 </div></li>
 
 </ul>
 </section>
-<section id="slide-org052b076">
-<h3 id="org052b076">Semantics of \(*\)</h3>
+<section id="slide-orgf40cd0b">
+<h3 id="orgf40cd0b">Semantics of \(*\)</h3>
 <div>
 \begin{aligned}
 (P * Q)(h) \iff \exists h_1, h_2.~ h = h_1 \uplus h_2 \land P(h_1) \land Q(h_2)
@@ -168,8 +178,8 @@ Can now formulate this:
 
 </ul>
 </section>
-<section id="slide-orgcdb08e0">
-<h3 id="orgcdb08e0">Frame Rule</h3>
+<section id="slide-org8664782">
+<h3 id="org8664782">Frame Rule</h3>
 <div>
 \begin{aligned}
 \frac{\{P\}~C~\{Q\}}{\{P * R\}~C~\{Q * R\}}
@@ -178,13 +188,22 @@ Can now formulate this:
 </div>
 
 <ul>
-<li class="fragment appear">Useful for local reasoning.</li>
-<li class="fragment appear">Add unaffected context \(R\) without changing correctness.</li>
+<li class="fragment appear">Simple, but encapsulates &ldquo;ownership reasoning&rdquo; of separation logic.</li>
+<li class="fragment appear">Only possible because of ownership semantics of points-to assertion.</li>
+<li class="fragment appear"><p>
+example:
+</p>
+<div>
+\begin{aligned}
+\{x ↦ 0\}\ y := new\ (42)\ \{x ↦ 0 * y ↦ 42\}
+\end{aligned}
+
+</div></li>
 
 </ul>
 </section>
-<section id="slide-orgf98add1">
-<h3 id="orgf98add1">Conclusion thus far</h3>
+<section id="slide-orge40c2a6">
+<h3 id="orge40c2a6">Conclusion thus far</h3>
 <ul>
 <li class="fragment appear">Convenient reasoning for shared heap where everyone operates on disjoint data</li>
 <li class="fragment appear">But at some point, there <b>will</b> be shared data</li>
@@ -193,15 +212,15 @@ Can now formulate this:
 </section>
 </section>
 <section>
-<section id="slide-org284df4e">
-<h2 id="org284df4e">CSL: Reasoning about shared data</h2>
-<div class="outline-text-2" id="text-org284df4e">
+<section id="slide-orgabf7b91">
+<h2 id="orgabf7b91">CSL: Reasoning about shared data</h2>
+<div class="outline-text-2" id="text-orgabf7b91">
 </div>
 </section>
-<section id="slide-org906ca56">
-<h3 id="org906ca56">Separation Logic &rarr; CSL: O'Hearn 2007</h3>
+<section id="slide-orgf9ba7c5">
+<h3 id="orgf9ba7c5">Separation Logic &rarr; CSL: O&rsquo;Hearn 2007</h3>
 <ul>
-<li>O'Hearns CSL = SL + resource invariants</li>
+<li>O&rsquo;Hearns CSL = SL + resource invariants</li>
 <li>a quick example</li>
 <li>ppl liked this, avalanche of subsequent works</li>
 <li>problem: every new paper/library had a slightly different way about the shared data reasoning part</li>
@@ -212,8 +231,8 @@ Can now formulate this:
 </section>
 </section>
 <section>
-<section id="slide-orgfb57313">
-<h2 id="orgfb57313">Enter Iris: CSL Unified</h2>
+<section id="slide-org7bfafd8">
+<h2 id="org7bfafd8">Enter Iris: CSL Unified</h2>
 <ul>
 <li>Iris is the unifying framework</li>
 <li>the premise: Monoids + Invariants is all you need</li>
@@ -223,13 +242,13 @@ Can now formulate this:
 </section>
 </section>
 <section>
-<section id="slide-orga14e512">
-<h2 id="orga14e512">Wdym Monoids + Invariants??</h2>
-<div class="outline-text-2" id="text-orga14e512">
+<section id="slide-org6704633">
+<h2 id="org6704633">Wdym Monoids + Invariants??</h2>
+<div class="outline-text-2" id="text-org6704633">
 </div>
 </section>
-<section id="slide-org43b7968">
-<h3 id="org43b7968">Where we are so far</h3>
+<section id="slide-org774d154">
+<h3 id="org774d154">Where we are so far</h3>
 <ul>
 <li class="fragment appear">have idea of what CSL is</li>
 <li class="fragment appear">know the context and goal of Iris</li>
@@ -239,12 +258,12 @@ Can now formulate this:
 <li class="fragment appear">how exactly does the Iris logic look like?</li>
 
 </ul></li>
-<li class="fragment appear">let's answer this with an example</li>
+<li class="fragment appear">let&rsquo;s answer this with an example</li>
 
 </ul>
 </section>
-<section id="slide-org32b9b34">
-<h3 id="org32b9b34">Invariants</h3>
+<section id="slide-org17f0034">
+<h3 id="org17f0034">Invariants</h3>
 <ul>
 <li>Allow us to reason about shared state</li>
 <li>Notation: \(\boxed{R}\)</li>
@@ -252,8 +271,8 @@ Can now formulate this:
 
 </ul>
 </section>
-<section id="slide-org6461b6e">
-<h4 id="org6461b6e">Working with Invariants</h4>
+<section id="slide-org4b83b73">
+<h4 id="org4b83b73">Working with Invariants</h4>
 <p>
 \[
 \frac{\left\{ R \ast P \right\} \ e \ \left\{ R \ast Q \right\} \qquad e
@@ -271,8 +290,8 @@ Can now formulate this:
 
 </ul>
 </section>
-<section id="slide-orgf6290f5">
-<h4 id="orgf6290f5">Working with Invariants (cont'd)</h4>
+<section id="slide-orgffce517">
+<h4 id="orgffce517">Working with Invariants (cont&rsquo;d)</h4>
 <p>
 \[
 \frac{\left\{ \boxed{R} \ast P \right\} \ e \ \left\{ Q \right\}
@@ -289,12 +308,12 @@ Can now formulate this:
 
 </ul>
 </section>
-<section id="slide-org9a27291">
-<h4 id="org9a27291">Monoids</h4>
+<section id="slide-org1721081">
+<h4 id="org1721081">Monoids</h4>
 <ul>
 <li class="fragment appear">Ghost state
 <ul>
-<li class="fragment appear">Purely logical, separate from the physical state of the program</li>
+<li class="fragment appear">Purely logical, unrelated from the physical state of the program</li>
 <li class="fragment appear">Keep track of history of computation</li>
 
 </ul></li>
@@ -312,14 +331,14 @@ binary operation \(\cdot \)
 
 </ul>
 </section>
-<section id="slide-org1eb23c4">
-<h4 id="org1eb23c4">Example</h4>
+<section id="slide-org8f20f3b">
+<h4 id="org8f20f3b">Example</h4>
 <div class="org-src-container">
 
-<pre class="fragment (appear)"><span style="color: #000000;">{</span> l &#8614; n <span style="color: #000000;">}</span>
-l &#8592; addOne<span style="color: #000000;">(</span>l<span style="color: #000000;">)</span> &#8214; l &#8592; addOne<span style="color: #000000;">(</span>l<span style="color: #000000;">)</span>
-<span style="color: #a60000; font-weight: bold;">!</span>l
-<span style="color: #000000;">{</span> v. v &#8805; n + 1 <span style="color: #000000;">}</span>
+<pre class="fragment (appear)"><span style="color: #a9b1d6;">{</span> l &#8614; n <span style="color: #a9b1d6;">}</span>
+l &#8592; addOne<span style="color: #a9b1d6;">(</span>l<span style="color: #a9b1d6;">)</span> &#8214; l &#8592; addOne<span style="color: #a9b1d6;">(</span>l<span style="color: #a9b1d6;">)</span>
+<span style="color: #7dcfff; font-weight: bold;">!</span>l
+<span style="color: #a9b1d6;">{</span> v. v &#8805; n + <span style="color: #ff9e64; font-weight: bold;">1</span> <span style="color: #a9b1d6;">}</span>
 </pre>
 </div>
 
@@ -328,8 +347,8 @@ l &#8592; addOne<span style="color: #000000;">(</span>l<span style="color: #0000
 
 </ul>
 </section>
-<section id="slide-orgf86fee6">
-<h3 id="orgf86fee6">An example program</h3>
+<section id="slide-orgc2a6a07">
+<h3 id="orgc2a6a07">An example program</h3>
 <ul>
 <li class="fragment appear">Consider instantiation of Iris with a &lambda;-Calculus</li>
 <li class="fragment appear"><p>
@@ -337,36 +356,40 @@ Consider the following object:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-c"><span style="color: #0000b0;">mk_oneshot</span> := &#955;_.
-    let x = ref<span style="color: #000000;">(</span>inl<span style="color: #dd22dd;">(</span>0<span style="color: #dd22dd;">)</span><span style="color: #000000;">)</span> in <span style="color: #000000;">{</span>
-      tryset = &#955;n. CAS<span style="color: #dd22dd;">(</span>x, inl<span style="color: #008899;">(</span>0<span style="color: #008899;">)</span>, inr<span style="color: #008899;">(</span>n<span style="color: #008899;">)</span><span style="color: #dd22dd;">)</span>,
+<pre class="src src-c"><span style="color: #ff9e64;">mk_oneshot</span> := &#955;_.
+    let x = ref<span style="color: #a9b1d6;">(</span>inl<span style="color: #7aa2f7;">(</span><span style="color: #ff9e64; font-weight: bold;">0</span><span style="color: #7aa2f7;">)</span><span style="color: #a9b1d6;">)</span> in <span style="color: #a9b1d6;">{</span>
+      tryset = &#955;n. <span style="color: #ff9e64;">CAS</span><span style="color: #7aa2f7;">(</span>x, inl<span style="color: #ff9e64;">(</span><span style="color: #ff9e64; font-weight: bold;">0</span><span style="color: #ff9e64;">)</span>, inr<span style="color: #ff9e64;">(</span>n<span style="color: #ff9e64;">)</span><span style="color: #7aa2f7;">)</span>,
       check = &#955;_.
-        let y = <span style="color: #a60000; font-weight: bold;">!</span>x in &#955;_.
-          match y,<span style="color: #a60000; font-weight: bold;">!</span>x with
-            | inl<span style="color: #dd22dd;">(</span>_<span style="color: #dd22dd;">)</span>,_      &#8658; <span style="color: #dd22dd;">()</span>
-            | inr<span style="color: #dd22dd;">(</span>n<span style="color: #dd22dd;">)</span>,inl<span style="color: #dd22dd;">(</span>_<span style="color: #dd22dd;">)</span> &#8658; assert<span style="color: #dd22dd;">(</span><span style="color: #0000b0;">false</span><span style="color: #dd22dd;">)</span>
-            | inr<span style="color: #dd22dd;">(</span>n<span style="color: #dd22dd;">)</span>,inr<span style="color: #dd22dd;">(</span>m<span style="color: #dd22dd;">)</span> &#8658; assert<span style="color: #dd22dd;">(</span>n = m<span style="color: #dd22dd;">)</span>
+        let y = <span style="color: #7dcfff; font-weight: bold;">!</span>x in &#955;_.
+          match y,<span style="color: #7dcfff; font-weight: bold;">!</span>x with
+            | inl<span style="color: #7aa2f7;">(</span>_<span style="color: #7aa2f7;">)</span>,_      &#8658; <span style="color: #7aa2f7;">()</span>
+            | inr<span style="color: #7aa2f7;">(</span>n<span style="color: #7aa2f7;">)</span>,inl<span style="color: #7aa2f7;">(</span>_<span style="color: #7aa2f7;">)</span> &#8658; assert<span style="color: #7aa2f7;">(</span><span style="color: #ff9e64;">false</span><span style="color: #7aa2f7;">)</span>
+            | inr<span style="color: #7aa2f7;">(</span>n<span style="color: #7aa2f7;">)</span>,inr<span style="color: #7aa2f7;">(</span>m<span style="color: #7aa2f7;">)</span> &#8658; assert<span style="color: #7aa2f7;">(</span>n = m<span style="color: #7aa2f7;">)</span>
           end
-    <span style="color: #000000;">}</span>
+    <span style="color: #a9b1d6;">}</span>
 </pre>
 </div></li>
-<li class="fragment appear">Prove the following CSL triple:</li>
-
-</ul>
+<li class="fragment appear"><p>
+We want to prove the following CSL triple:
+</p>
+<span style="font-size:70%">
 <div>
 \begin{aligned}
-  \{True\}\ mk\_oneshot\ ()\
-    \left\{
-      c.\forall v.
-      \begin{array}{l}
+\{True\}\ mk\_oneshot\ ()\
+\left\{
+c.\forall v.
+\begin{array}{l}
         \{True\}\ c.tryset\ v\ \{w.w\in \{true,false\}\}\ * \\
         {}
         \{True\}\ c.check\ () \{f.\{True\}f\ ()\ \{True\}\}
-      \end{array}
-    \right\}
+\end{array}
+\right\}
 \end{aligned}
 
 </div>
+</span></li>
+
+</ul>
 </section>
 </section>
 </div>
