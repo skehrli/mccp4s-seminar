@@ -135,22 +135,23 @@ Iris is a framework for
 * Enter Iris: CSL Unified (Jung, 2015)
 #+ATTR_REVEAL: :frag (appear)
 - Iris is the unifying framework
-- the premise: Monoids + Invariants is all you need
+- the premise: Monoids + Invariants are all you need
 - neither idea new, but presented as unification of previous approaches
 * Wdym Monoids + Invariants??
-** Where we are so far
+** Monoids + Invariants: Conceptually
 #+ATTR_REVEAL: :frag (appear)
-- have idea of what CSL is
-- know the context and goal of Iris
-- BUT
+- assume shared memory location $a$
+- we want to prove that some concurrent access protocol on $a$ is correct
+- idea: create a 'ghost location' $b$ representing $a$ and describe the protocol on $b$
   #+ATTR_REVEAL: :frag (appear)
-  + what kinds of proofs do we do in Iris?
-  + how exactly does the Iris logic look like?
-- let's answer this with an example
+  + $b$ follows a certain structure (Monoid)
+  + the operations of Monoid defined by user to encode protocol
+- i.e. read Monoid as 'Protocol'
+- idea 2: tie the state of $b$ to $a$ with invariants
 ** Invariants
 - Allow us to reason about shared state
 - Notation: \(\boxed{R}\)
-- Duplicatable: \(\boxed{R} \vdash \boxed{R} \ast \boxed{R}\)
+- Duplicable: \(\boxed{R} \vdash \boxed{R} \ast \boxed{R}\)
 
 *** Working with Invariants
 \[
