@@ -285,8 +285,8 @@ mk_oneshot := λ_.
 #+ATTR_REVEAL: :frag appear
 *Limitations*
 #+ATTR_REVEAL: :frag (appear)
-- Logic overly complicated in 2015 paper, later simplified
-- Monoids ended up not being all you need
+- Logic overly complicated in 2015 paper (Iris 1.0), later simplified
+- (Partial Commutative) Monoids ended up not being all you need
 - did it really unify CSL?
   #+ATTR_HTML: :width 100%
   [[file:csl-family-tree.png]]
