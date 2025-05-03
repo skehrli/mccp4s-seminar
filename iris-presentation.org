@@ -281,7 +281,7 @@ mk_oneshot := λ_.
 - clear goal, no overpromise
 - tremendous impact
 #+REVEAL_HTML: </div>
-#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+#+REVEAL_HTML: <div class="column" style="float:right; width: 50%">
 #+ATTR_REVEAL: :frag appear
 *Limitations*
 #+ATTR_REVEAL: :frag (appear)
