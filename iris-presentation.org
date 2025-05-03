@@ -146,8 +146,9 @@ Iris is a framework for
   #+ATTR_REVEAL: :frag (appear)
   + $b$ follows a certain structure (Monoid)
   + the operations of Monoid defined by user to encode protocol
-- i.e. read Monoid as 'Protocol'
 - idea 2: tie the state of $b$ to $a$ with invariants
+- Monoid: Generic structure to express protocol
+- Invariant: Enforce protocol
 ** Invariants
 - Allow us to reason about shared state
 - Notation: \(\boxed{R}\)
@@ -270,3 +271,23 @@ mk_oneshot := λ_.
   \right\}
   \end{aligned}
   #+REVEAL_HTML: </span>
+
+* Discussion
+** Strengths/Limitations
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+#+ATTR_REVEAL: :frag appear
+*Strengths*
+#+ATTR_REVEAL: :frag (appear)
+- clear goal, no overpromise
+- tremendous impact
+#+REVEAL_HTML: </div>
+#+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+#+ATTR_REVEAL: :frag appear
+*Limitations*
+#+ATTR_REVEAL: :frag (appear)
+- Logic overly complicated in 2015 paper, later simplified
+- Monoids ended up not being all you need
+- did it really unify CSL?
+  #+ATTR_HTML: :width 100%
+  [[file:csl-family-tree.png]]
+#+REVEAL_HTML: </div>
