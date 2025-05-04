@@ -137,6 +137,7 @@ Iris is a framework for
 - Iris is the unifying framework
 - the premise: Monoids + Invariants are all you need
 - neither idea new, but presented as unification of previous approaches
+- Goal of Iris: a minimal generic base logic that can derive all previous logics
 * Wdym Monoids + Invariants??
 ** Monoids + Invariants: Conceptually
 #+ATTR_REVEAL: :frag (appear)
