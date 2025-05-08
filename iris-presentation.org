@@ -136,10 +136,13 @@ Iris is a framework for
 #+ATTR_REVEAL: :frag (appear)
 - Iris is the unifying framework
 - the premise: Monoids + Invariants are all you need
-- neither idea new, but presented as unification of previous approaches
-- Goal of Iris: a minimal generic base logic that can derive all previous logics
+- Goal of Iris: a minimal generic base logic for concurrent reasoning subsuming all previous work
 * Wdym Monoids + Invariants??
-** Monoids + Invariants: Conceptually
+** Monoids
+- reminder: monoid axioms
+- heap as a monoid
+- idea: monoids as unifying abstraction for state (beyond heap)
+** Monoids + Invariants: What do we do with this
 #+ATTR_REVEAL: :frag (appear)
 - assume shared memory location $a$
 - we want to prove that some concurrent access protocol on $a$ is correct
@@ -148,9 +151,18 @@ Iris is a framework for
   + $b$ follows a certain structure (Monoid)
   + the operations of Monoid defined by user to encode protocol
 - idea 2: tie the state of $b$ to $a$ with invariants
-- Monoid: Generic structure to express protocol
-- Invariant: Enforce protocol
-** Invariants
+- ghost heap as monoid
+** Example
+- need to show language to instantiate iris with
+- need to show monoid for physical state (e.g. heap or channel stuff from 2015 paper example)
+- show example program, what triple to prove
+- mention partial correctness (even {True}C{True} shows doesn't crash)
+- construct ghost monoid for protocol
+- show invariants (define invariant, show rules e.g. unboxing invariant)
+- execute proof
+  + change ghost state (introduce view shifts)
+  + ...
+*** Invariants
 - Allow us to reason about shared state
 - Notation: \(\boxed{R}\)
 - Duplicable: \(\boxed{R} \vdash \boxed{R} \ast \boxed{R}\)
@@ -231,48 +243,23 @@ l ← addOne(l) ‖ l ← addOne(l)
 #+end_src
 
 #+ATTR_REVEAL: :frag (appear)
-- Use the /authoritative monoid/
+- Use the /authoritative monoid/ (use ghost state instead with heap monoid instantiation)
    #+ATTR_REVEAL: :frag (appear)
   + Ghost variables come in pairs \(\gamma \hookrightarrow_{\bullet} n \ast \gamma    \hookrightarrow_{\circ} n\)
   + One owns the global authoritative state of ghost resource
   + Everyone else owns fragments of resource
 - Invariant: \(\exists n_{1}, n_{2}. (n_{1} + n_{2}) \ast \gamma_{1} \hookrightarrow_{\bullet} n_{1} \ast
   \gamma_{2} \hookrightarrow_{\bullet} n_{2}\)
-
-*** Example
-
-** An example program
-#+ATTR_REVEAL: :frag (appear)
-- Consider instantiation of Iris with a \lambda-Calculus
-- Consider the following object:
-  #+begin_src c
-mk_oneshot := λ_.
-    let x = ref(inl(0)) in {
-      tryset = λn. CAS(x, inl(0), inr(n)),
-      check = λ_.
-        let y = !x in λ_.
-          match y,!x with
-            | inl(_),_      ⇒ ()
-            | inr(n),inl(_) ⇒ assert(false)
-            | inr(n),inr(m) ⇒ assert(n = m)
-          end
-    }
-  #+end_src
-- Prove the following CSL triple:
-  #+REVEAL_HTML: <span style="font-size:70%">
-  \begin{aligned}
-  \{True\}\ mk\_oneshot\ ()\
-  \left\{
-  c.\forall v.
-  \begin{array}{l}
-          \{True\}\ c.tryset\ v\ \{w.w\in \{true,false\}\}\ * \\
-          {}
-          \{True\}\ c.check\ () \{f.\{True\}f\ ()\ \{True\}\}
-  \end{array}
-  \right\}
-  \end{aligned}
-  #+REVEAL_HTML: </span>
-
+** Logical atomicity
+- transactions
+- this exists
+** What we didn't talk about
+- Iris is mostly about unifying abstractions
+  + small base logic to derive expressive reasoning from
+- we didn't look at the base logic at all
+  + soundness of the logic
+  + this all exists and is formalized in rocq, but out of scope of presentation (and even of the og 2015 paper)
+- (and we didnt look at it)
 * Discussion
 ** Strengths/Limitations
 #+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
@@ -286,6 +273,7 @@ mk_oneshot := λ_.
 #+ATTR_REVEAL: :frag appear
 *Limitations*
 #+ATTR_REVEAL: :frag (appear)
+- no real engineering applications so far (more metatheory)
 - Logic overly complicated in 2015 paper (Iris 1.0), later simplified
 - (Partial Commutative) Monoids ended up not being all you need
 - did it really unify CSL?
