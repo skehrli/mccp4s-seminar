@@ -280,3 +280,48 @@ l ← addOne(l) ‖ l ← addOne(l)
   #+ATTR_HTML: :width 100%
   [[file:csl-family-tree.png]]
 #+REVEAL_HTML: </div>
+
+=fetchAndAdd= atomic
+Proof outline using Ex(X) monoid
+
+{ True }
+let x = ref(0) in
+{ \(x \mapsto 0\) }
+// Allocate ghost resources
+{ \(x \mapsto 0 \ \ast \ \boxed{\gamma_{1} \mapsto 0}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto 0}_{g}\) }
+// Allocate invariant
+\(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \
+\boxed{\gamma_{2} \mapsto  n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)
+
+// Duplicate invariant
+\(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1} \mapsto
+n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)
+ \(\ast \)
+\(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1} \mapsto
+n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)
+
+// Par rule
+\(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1} \mapsto
+n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)  \(\Vert\) \(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1} \mapsto
+n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)
+
+// Open invariant
+{ \(x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1} \mapsto n_{1}}_{g} \ \ast \
+\boxed{\gamma_{2} \mapsto n_{2}}_{g} \) }    \(\Vert\)    {\(\ x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1}
+\mapsto n_{1}}_{g} \ \ast \
+\boxed{\gamma_{2} \mapsto n_{2}}_{g}\) }
+
+// ??? We don't know what value x points to
+x ← fetchAndAdd(x,2)                    \(\Vert\) x ← fetchAndAdd(x,2)
+
+
+// Close invariant
+\(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \
+\boxed{\gamma_{1} \mapsto n_{1}}_{g} \ \ast \ \boxed{\gamma_{2}
+\mapsto n_{2}}_{g}}\)  \(\Vert\) \(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \
+\boxed{\gamma_{1} \mapsto n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)
+
+
+
+!x
+{ v. v = 4 }
