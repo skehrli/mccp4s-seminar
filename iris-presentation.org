@@ -1,7 +1,7 @@
 :REVEAL_PROPERTIES:
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
 #+REVEAL_VERSION: 4
-#+REVEAL_THEME: moon
+#+REVEAL_THEME: white
 #+REVEAL_TRANS: slide
 #+REVEAL_MIN_SCALE: 1.0
 #+REVEAL_MAX_SCALE: 1.0
@@ -55,19 +55,19 @@ Iris is a framework for
 ** Motivation: Why Separation Logic?
 #+ATTR_REVEAL: :frag (appear)
 - Consider program:
-  #+BEGIN_SRC c
+  #+BEGIN_SRC
   void f(int* x, int* y) {
     *x = 1;
     *y = 2;
   }
   #+END_SRC
 - Naive Hoare logic spec:
-  #+begin_src c
+  #+begin_src
 { true } f(x, y) { *x == 1 ^ *y == 2 }
   #+end_src
 - What if $x == y$? Spec invalid!
 - What we want instead:
-  #+begin_src c
+  #+begin_src
 { "x and y disjoint" } f(x, y) { *x == 1 ^ *y == 2 }
   #+end_src
 
