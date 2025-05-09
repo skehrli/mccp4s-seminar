@@ -128,10 +128,8 @@ Iris is a framework for
 ** Where are we now?
 #+ATTR_REVEAL: :frag (appear)
 - ppl impressed by capabilities of CSL, avalanche of subsequent work follows
-- problem: every new paper/library has slightly different way about shared resource reasoning part
-- everyone came up with own separation logic with own primitives and proof rules
+- problem: every new paper/library came up with own separation logic
 - Parkinson, 2010: CSL must be unified in a common framework
- - ppl can focus on actually verifying things
 * Enter Iris: CSL Unified (Jung, 2015)
 #+ATTR_REVEAL: :frag (appear)
 - Iris is the unifying framework
@@ -188,8 +186,11 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
         #+attr_org: :width 600px
         [[file:sts_monoid.png]]
 * Example: Setting
+#+ATTR_REVEAL: :frag (appear)
 - Iris instantiated with default 'heap lang'
 - Normal heap monoid for physical state
+- 'Authoritative Monoid' for ghost state
+- beware of informality: full formality of example would take hours
 * Example
 - show example program, what triple to prove
 - mention partial correctness (even {True}C{True} shows doesn't crash)
