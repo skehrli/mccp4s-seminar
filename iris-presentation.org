@@ -36,8 +36,8 @@ Iris is a framework for
 ** Some Notes
 #+ATTR_REVEAL: :frag (appear)
 - formalized entirely in Rocq proof assistant
-- not tied to particular language semantics
-- example: type safety proof of (a realistic subset of) Rust formalized using Iris
+- example: type safety proof of (a realistic subset of) Rust formalized in Iris
+- example: Perennial, framework for reasoning about crash safety, formalized in Iris
 * Who is behind Iris?
 :PROPERTIES:
 :ID:       ab7c0539-4948-46c7-8fba-5591d366ef3a
@@ -65,7 +65,7 @@ Iris is a framework for
   #+begin_src c
 { true } f(x, y) { *x == 1 ^ *y == 2 }
   #+end_src
-- What if $x == y$? Spec becomes invalid!
+- What if $x == y$? Spec invalid!
 - What we want instead:
   #+begin_src c
 { "x and y disjoint" } f(x, y) { *x == 1 ^ *y == 2 }
@@ -135,26 +135,62 @@ Iris is a framework for
 * Enter Iris: CSL Unified (Jung, 2015)
 #+ATTR_REVEAL: :frag (appear)
 - Iris is the unifying framework
+- Goal of Iris: a minimal base logic for concurrent reasoning (subsuming all previous work)
 - the premise: Monoids + Invariants are all you need
-- Goal of Iris: a minimal generic base logic for concurrent reasoning subsuming all previous work
-* Wdym Monoids + Invariants??
-** Monoids
-- reminder: monoid axioms
-- heap as a monoid
-- idea: monoids as unifying abstraction for state (beyond heap)
-** Monoids + Invariants: What do we do with this
+* Monoids + Invariants: Conceptually
 #+ATTR_REVEAL: :frag (appear)
 - assume shared memory location $a$
-- we want to prove that some concurrent access protocol on $a$ is correct
-- idea: create a 'ghost location' $b$ representing $a$ and describe the protocol on $b$
+- goal: prove some concurrent program using $a$ correct
+- idea: create a 'ghost location' $b$ representing $a$ and describe protocol on $b$
   #+ATTR_REVEAL: :frag (appear)
   + $b$ follows a certain structure (Monoid)
-  + the operations of Monoid defined by user to encode protocol
+  + operation of Monoid defined by user to encode protocol
 - idea 2: tie the state of $b$ to $a$ with invariants
-- ghost heap as monoid
-** Example
-- need to show language to instantiate iris with
-- need to show monoid for physical state (e.g. heap or channel stuff from 2015 paper example)
+* Monoids
+** Reminder: (Commutative) Monoid Axioms
+A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic structure with:
+#+ATTR_REVEAL: :frag (appear)
+- Carrier set $|M|$
+- identity element $\epsilon$ with
+  #+ATTR_REVEAL: :frag (appear)
+  $\epsilon \cdot a = a$
+- Binary operation $\cdot$ with
+  #+ATTR_REVEAL: :frag (appear)
+  $(a \cdot b) \cdot c = a \cdot (b \cdot c)$
+  #+ATTR_REVEAL: :frag (appear)
+  $a \cdot b = b \cdot a$
+- zero element $\bot$ with
+  #+ATTR_REVEAL: :frag (appear)
+  $\bot \cdot a = \bot$
+  #+ATTR_REVEAL: :frag (appear)
+  $\bot \neq \epsilon$
+** Observation: Heap is a Monoid
+#+ATTR_REVEAL: :frag (appear)
+- Carrier set:
+  #+ATTR_REVEAL: :frag (appear)
+  (finite partial) function from locations to values
+  $$h : \text{Loc} \rightharpoonup \text{Val}$$
+- Heap composition:
+  #+ATTR_REVEAL: :frag (appear)
+  $$(h_1 \cdot h_2)(l) = \begin{cases} h_1(l),\ \text{if } l \in dom(h_1) \\ h_2(l),\ \text{if } l \in dom(h_2) \\ \text{undefined},\ \text{else} \end{cases}$$
+  #+ATTR_REVEAL: :frag (appear)
+  (if $dom(h_1) \cap dom(h_2) = \emptyset$)
+- Identity element $\epsilon \equiv \emptyset$
+** Conclusion: Monoids as Unifying Abstraction for State
+:PROPERTIES:
+:ID:       48f93f91-3753-41cd-92aa-d6dfb0f9b2f8
+:END:
+#+ATTR_REVEAL: :frag (appear)
+- arbitrary protocols
+- provides 'primitive', composable monoids (exclusive, fractional, authoritative, ...)
+- build up sophisticated structures
+        #+ATTR_HTML: :width 80%
+        #+attr_org: :width 600px
+        [[file:sts_monoid.png]]
+* Example: Setting
+- Iris instantiated with default 'heap lang'
+- Normal heap monoid for physical state
+* Example
 - show example program, what triple to prove
 - mention partial correctness (even {True}C{True} shows doesn't crash)
 - construct ghost monoid for protocol
@@ -162,12 +198,12 @@ Iris is a framework for
 - execute proof
   + change ghost state (introduce view shifts)
   + ...
-*** Invariants
+** Invariants
 - Allow us to reason about shared state
 - Notation: \(\boxed{R}\)
 - Duplicable: \(\boxed{R} \vdash \boxed{R} \ast \boxed{R}\)
 
-*** Working with Invariants
+** Working with Invariants
 \[
 \frac{\left\{ R \ast P \right\} \ e \ \left\{ R \ast Q \right\} \qquad e
 \text{ atomic} }{\left\{ \boxed{R} \ast P \right\} \ e \ \left\{ \boxed{R} \ast Q \right\} }
@@ -178,7 +214,7 @@ Iris is a framework for
   + Open invariant to acquire temporary ownership of shared resource
   + Once invariant is reestablished, it can be closed again
 
-*** Working with Invariants (cont'd)
+** Working with Invariants (cont'd)
 \[
 \frac{\left\{ \boxed{R} \ast P \right\} \ e \ \left\{ Q \right\}
 }{\left\{ R \ast P \right\} \ e \ \left\{ Q \right\} }
@@ -188,24 +224,7 @@ Iris is a framework for
    #+ATTR_REVEAL: :frag (appear)
    - Create invariant and give up ownership of \(R\)
        
-*** Monoids
-#+ATTR_REVEAL: :frag (appear)
-- Ghost state
-   #+ATTR_REVEAL: :frag (appear)
-  + Purely logical, unrelated from the physical state of the program
-  + Keep track of history of computation
-- Modelled as a /partial commutative monoid/ (PCM)
-   + Taken as parameter of the logic
-- Set \(\lvert M \rvert \) with a zero \(\bot\), unit \(\epsilon\),
-  binary operation \(\cdot \)
-  #+ATTR_REVEAL: :frag (appear)
-  + \(a \cdot b = b \cdot a\)
-  + \(\epsilon \cdot a = a \)
-  + \((a \cdot b) \cdot c = a \cdot (b \cdot c)\)
-  + \(\bot \cdot a = \bot\)
-  + \(\bot \neq \epsilon\)
-
-*** Ghost state
+** Ghost state
 #+ATTR_REVEAL: :frag (appear)
 - For element \(a\) in Monoid, exists corresponding ghost
   assertion \(\boxed{a}_{g}\)
@@ -218,7 +237,7 @@ Iris is a framework for
 - Ghost resources can be split and combined arbitrarily: \(\boxed{t \cdot
   u}_{g} \iff  \boxed{t}_{g} \ast \boxed{u}_{g}\)
 
-*** Ghost state
+** Ghost state
 \[
 \frac{a \rightsquigarrow B}{\boxed{a}_{g} \Rrightarrow \exists b \in B. \boxed{b}_{g}}
 \]
@@ -234,7 +253,7 @@ Iris is a framework for
   + State obtained by composing the contributions of all threads is a
     valid element (not \(\bot\))
 
-*** Example
+** Example
 #+begin_src c
 { l ↦ n }
 l ← addOne(l) ‖ l ← addOne(l)
@@ -250,16 +269,16 @@ l ← addOne(l) ‖ l ← addOne(l)
   + Everyone else owns fragments of resource
 - Invariant: \(\exists n_{1}, n_{2}. (n_{1} + n_{2}) \ast \gamma_{1} \hookrightarrow_{\bullet} n_{1} \ast
   \gamma_{2} \hookrightarrow_{\bullet} n_{2}\)
-** Logical atomicity
+* Logical atomicity
 - transactions
 - this exists
-** What we didn't talk about
-- Iris is mostly about unifying abstractions
-  + small base logic to derive expressive reasoning from
+* What we didn't talk about
+#+ATTR_REVEAL: :frag (appear)
+- Iris is largely about minimal base logic to derive expressive reasoning from
 - we didn't look at the base logic at all
+  #+ATTR_REVEAL: :frag (appear)
   + soundness of the logic
-  + this all exists and is formalized in rocq, but out of scope of presentation (and even of the og 2015 paper)
-- (and we didnt look at it)
+  + this all exists, formalized in Rocq, but out of scope (of even the og 2015 paper)
 * Discussion
 ** Strengths/Limitations
 #+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
@@ -277,6 +296,7 @@ l ← addOne(l) ‖ l ← addOne(l)
 - Logic overly complicated in 2015 paper (Iris 1.0), later simplified
 - (Partial Commutative) Monoids ended up not being all you need
 - did it really unify CSL?
+  #+ATTR_ORG: :width 600px
   #+ATTR_HTML: :width 100%
   [[file:csl-family-tree.png]]
 #+REVEAL_HTML: </div>
