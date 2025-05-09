@@ -185,13 +185,68 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
         #+ATTR_HTML: :width 80%
         #+attr_org: :width 600px
         [[file:sts_monoid.png]]
-* Example: Setting
+* Example
+** Setting
 #+ATTR_REVEAL: :frag (appear)
 - Iris instantiated with default 'heap lang'
 - Normal heap monoid for physical state
 - 'Authoritative Monoid' for ghost state
 - beware of informality: full formality of example would take hours
-* Example
+** Example: Program
+:PROPERTIES:
+:reveal_extra_attr: data-transition="none"
+:END:
+#+ATTR_REVEAL: :frag (appear)
+- counter module with functions
+  #+begin_src
+  newCounter() := ref (0)
+  incr l       := let n <- !l in
+                    if CAS(l, n, n+1) then n
+                    else incr l
+  #+end_src
+- want to prove spec
+  #+ATTR_REVEAL: :frag appear
+  \[
+  \{True\}\ \text{newCounter()}\ \{u.Inv(u, 0)\}
+  \]
+
+  #+ATTR_REVEAL: :frag appear
+  \[
+  \{Inv(l, n)\}\
+  \text{incr l}\
+  \{u.u \geq n * Inv(l, n+1)\}
+  \]
+- what should Inv(l, n) be?
+  #+ATTR_REVEAL: :frag (appear)
+  - 1. idea: $Inv(l, n) := l \mapsto n$
+    #+ATTR_REVEAL: :frag (appear)
+    + problem: only persistent knowledge useful in concurrent setting
+** Example: Program
+:PROPERTIES:
+:reveal_extra_attr: data-transition="none"
+:END:
+- counter module with functions
+  #+begin_src
+  newCounter() := ref (0)
+  incr l       := let n <- !l in
+                    if CAS(l, n, n+1) then n
+                    else incr l
+  #+end_src
+- want to prove spec
+  \[
+  \{True\}\ \text{newCounter()}\ \{u.Inv(u, 0)\}
+  \]
+
+  \[
+  \{Inv(l, n)\}\
+  \text{incr l}\
+  \{u.u \geq n * Inv(l, n+1)\}
+  \]
+- what should Inv(l, n) be?
+  - 2. idea: lower bound $Inv(l, n) := \exists m.\ l \mapsto m \land m \geq n$
+    #+ATTR_REVEAL: :frag (appear)
+    - problem:
+* Notes
 - show example program, what triple to prove
 - mention partial correctness (even {True}C{True} shows doesn't crash)
 - construct ghost monoid for protocol
