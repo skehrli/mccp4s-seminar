@@ -245,7 +245,31 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
 - what should Inv(l, n) be?
   - 2. idea: lower bound $Inv(l, n) := \exists m.\ l \mapsto m \land m \geq n$
     #+ATTR_REVEAL: :frag (appear)
-    - problem:
+    - problem: cannot update \(n\) to \(n+1\)
+** Example: Program
+#+ATTR_REVEAL: :frag (appear)
+- Solution: ghost state
+   #+ATTR_REVEAL: :frag (appear)
+  - Purely logical
+  - Modelled as PCM
+- Idea
+   #+ATTR_REVEAL: :frag (appear)
+  - Ghost state inside invariant \(\boxed{\bullet m}_{g}^{\gamma}\)
+  - Ghost state outside invariant \(\boxed{\circ n}_{g}^{\gamma}\)
+  - Somehow combine the two
+** Example: Authoritative monoid
+- How technical should this be?
+** Example: Proof
+- \( \{ True \} \ \mathtt{newCounter}() \ \{ l. \ \boxed{\circ
+  n}_{g}^{\gamma} \ast Inv(l, 0) \} \)
+- \(
+  \{\boxed{\circ n}_{g}^{\gamma} \ast Inv(l, n)\}\
+  \texttt{incr l}\
+  \{u. \ u \geq n \ast \boxed{\circ n}_{g}^{\gamma} \ast Inv(l, n+1)\}
+  \)
+- \(Inv(l,n) := \boxed{\exists m. \ l \mapsto m \land m \ge  n} \)
+  - Invariant has to be persistent
+     
 * Notes
 - show example program, what triple to prove
 - mention partial correctness (even {True}C{True} shows doesn't crash)
