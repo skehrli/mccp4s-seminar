@@ -207,14 +207,14 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
 - want to prove spec
   #+ATTR_REVEAL: :frag appear
   \[
-  \{True\}\ \text{newCounter()}\ \{u.Inv(u, 0)\}
+  \{True\}\ \texttt{newCounter()}\ \{l. \ Inv(l, 0)\}
   \]
 
   #+ATTR_REVEAL: :frag appear
   \[
   \{Inv(l, n)\}\
-  \text{incr l}\
-  \{u.u \geq n * Inv(l, n+1)\}
+  \texttt{incr l}\
+  \{u. \ u \geq n * Inv(l, n+1)\}
   \]
 - what should Inv(l, n) be?
   #+ATTR_REVEAL: :frag (appear)
@@ -234,13 +234,13 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
   #+end_src
 - want to prove spec
   \[
-  \{True\}\ \text{newCounter()}\ \{u.Inv(u, 0)\}
+  \{True\}\ \texttt{newCounter()}\ \{l. \ Inv(l, 0)\}
   \]
 
   \[
   \{Inv(l, n)\}\
-  \text{incr l}\
-  \{u.u \geq n * Inv(l, n+1)\}
+  \texttt{incr l}\
+  \{u. \ u \geq n * Inv(l, n+1)\}
   \]
 - what should Inv(l, n) be?
   - 2. idea: lower bound $Inv(l, n) := \exists m.\ l \mapsto m \land m \geq n$
