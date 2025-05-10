@@ -270,7 +270,30 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
   \)
 - \(Inv(l) := \boxed{\exists m. \ l \mapsto m \ast  \boxed{\bullet m}_{g}^{}} \)
   - Invariant has to be persistent
-     
+** Example: Proof of =newCounter()=
+- Recall
+  - \(Inv(l) := \boxed{\exists m. \ l \mapsto m \ast \boxed{\bullet m}_{g}^{\gamma}} \)
+  - \(\mathtt{newCounter}() := \mathtt{ref}(0) \)
+#+ATTR_REVEAL: :frag (appear)
+- \( \{ True \} \ \mathtt{newCounter}() \ \{ l. \ \boxed{\circ
+  0}_{g}^{\gamma} \ast Inv(l) \} \)
+- introduce invariant & ghost allocation
+
+** Example: Proof of =incr l=
+- Recall
+  - \(Inv(l) := \boxed{\exists m. \ l \mapsto m \ast \boxed{\bullet m}_{g}^{\gamma}} \)
+    \begin{align*}
+     \mathtt{incr} \ l := \ &\mathtt{let} \ n \gets !l \ \mathtt{in} \\
+                    &\mathtt{if} \ \mathtt{CAS}(l, n, n+1) \ \mathtt{then} \ n\\
+                    &\mathtt{else} \ \mathtt{incr} \ l
+   \end{align*}
+
+#+ATTR_REVEAL: :frag (appear)
+- \( \{ True \} \ \mathtt{newCounter}() \ \{ l. \ \boxed{\circ
+  0}_{g}^{\gamma} \ast Inv(l) \} \)
+- introduce invariant rule
+- introduce view shift
+
 * Notes
 - show example program, what triple to prove
 - mention partial correctness (even {True}C{True} shows doesn't crash)
