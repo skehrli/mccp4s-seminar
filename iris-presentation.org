@@ -260,14 +260,15 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
 ** Example: Authoritative monoid
 - How technical should this be?
 ** Example: Proof
+#+ATTR_REVEAL: :frag (appear)
 - \( \{ True \} \ \mathtt{newCounter}() \ \{ l. \ \boxed{\circ
-  n}_{g}^{\gamma} \ast Inv(l, 0) \} \)
+  n}_{g}^{\gamma} \ast Inv(l) \} \)
 - \(
-  \{\boxed{\circ n}_{g}^{\gamma} \ast Inv(l, n)\}\
+  \{\boxed{\circ n}_{g}^{\gamma} \ast Inv(l)\}\
   \texttt{incr l}\
-  \{u. \ u \geq n \ast \boxed{\circ n}_{g}^{\gamma} \ast Inv(l, n+1)\}
+  \{u. \ u \geq n \ast \boxed{\circ n}_{g}^{\gamma} \ast Inv(l)\}
   \)
-- \(Inv(l,n) := \boxed{\exists m. \ l \mapsto m \land m \ge  n} \)
+- \(Inv(l) := \boxed{\exists m. \ l \mapsto m \ast  \boxed{\bullet m}_{g}^{}} \)
   - Invariant has to be persistent
      
 * Notes
