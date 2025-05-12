@@ -214,7 +214,7 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
   \[
   \{Inv(l, n)\}\
   \texttt{incr l}\
-  \{u. \ u \geq n * Inv(l, n+1)\}
+  \{u. \ Inv(l, n+1)\}
   \]
 - what should Inv(l, n) be?
   #+ATTR_REVEAL: :frag (appear)
@@ -252,8 +252,8 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
 - Solution: counter owns itself
 - Idea
    #+ATTR_REVEAL: :frag (appear)
-  - Ghost state inside invariant \(\boxed{\bullet m}_{g}^{\gamma}\)
-  - Ghost state outside invariant \(\boxed{\circ n}_{g}^{\gamma}\)
+  - Ghost location
+  - Entangled pair for variable
 ** Solution: Authoritative monoid
 #+ATTR_REVEAL: :frag (appear)
 - Monoid construction itself very technical
@@ -269,9 +269,11 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
   \)
 - Ghost resources (in general) can be split and combined arbitrarily: \(\boxed{t \cdot
   u}_{g} \iff  \boxed{t}_{g} \ast \boxed{u}_{g}\)
+- Ghost state inside invariant \(\boxed{\bullet m}_{g}^{\gamma}\)
+- Ghost state outside invariant \(\boxed{\circ n}_{g}^{\gamma}\)
 ** Example: Hoare Triple Spec
 #+ATTR_REVEAL: :frag (appear)
-- \(Inv(l) := \boxed{\exists m. \ l \mapsto m \ast  \boxed{\bullet m}_g^{\gamma}\}_{}^{}} \)
+- \(Inv(l) := \boxed{\exists m. \ l \mapsto m \ast  \boxed{\bullet m}_g^{\gamma} }\)
 - \( \{ True \} \ \mathtt{newCounter}() \ \{ l. \ \boxed{\circ
   0}_{g}^{\gamma} \ast Inv(l) \} \)
 - \(
