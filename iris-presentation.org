@@ -248,19 +248,30 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
     - problem: cannot update \(n\) to \(n+1\)
 ** Example: Program
 #+ATTR_REVEAL: :frag (appear)
-- Solution: ghost state
-   #+ATTR_REVEAL: :frag (appear)
-  - Purely logical
-  - Modelled as PCM
+- What is invariant about a counter?
+- Solution: counter owns itself
 - Idea
    #+ATTR_REVEAL: :frag (appear)
   - Ghost state inside invariant \(\boxed{\bullet m}_{g}^{\gamma}\)
   - Ghost state outside invariant \(\boxed{\circ n}_{g}^{\gamma}\)
-  - Somehow combine the two
-** Example: Authoritative monoid
-- How technical should this be?
-** Example: Proof
+** Solution: Authoritative monoid
 #+ATTR_REVEAL: :frag (appear)
+- Monoid construction itself very technical
+- Rules:
+  #+ATTR_REVEAL: :frag (appear)
+  \(True \Rrightarrow \exists\gamma.\boxed{\bullet n}_g^\gamma * \boxed{\circ n}_{g}^{\gamma} \
+  \)
+  #+ATTR_REVEAL: :frag (appear)
+  \(\boxed{\bullet n \cdot \circ m}_g^\gamma \implies n = m\
+  \)
+  #+ATTR_REVEAL: :frag (appear)
+  \(\boxed{\bullet n \cdot \circ n}_g^\gamma \Rrightarrow \boxed{\bullet n' \cdot \circ n'}_g^\gamma
+  \)
+- Ghost resources (in general) can be split and combined arbitrarily: \(\boxed{t \cdot
+  u}_{g} \iff  \boxed{t}_{g} \ast \boxed{u}_{g}\)
+** Example: Hoare Triple Spec
+#+ATTR_REVEAL: :frag (appear)
+- \(Inv(l) := \boxed{\exists m. \ l \mapsto m \ast  \boxed{\bullet m}_g^{\gamma}\}_{}^{}} \)
 - \( \{ True \} \ \mathtt{newCounter}() \ \{ l. \ \boxed{\circ
   0}_{g}^{\gamma} \ast Inv(l) \} \)
 - \(
@@ -268,16 +279,43 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
   \texttt{incr l}\
   \{u. \ u \geq n \ast \boxed{\circ (n+1)}_{g}^{\gamma} \ast Inv(l)\}
   \)
-- \(Inv(l) := \boxed{\exists m. \ l \mapsto m \ast  \boxed{\bullet m}_{g}^{}} \)
-  - Invariant has to be persistent
+** Invariants in Iris
+#+ATTR_REVEAL: :frag (appear)
+- Allocation rule
+   #+ATTR_REVEAL: :frag (appear)
+   - Create invariant and give up ownership of \(R\)
+        \[
+        \frac{\left\{ \boxed{R} \ast P \right\} \ e \ \left\{ Q \right\}
+        }{\left\{ R \ast P \right\} \ e \ \left\{ Q \right\} }
+        \]
+
+- Invariant rule
+   #+ATTR_REVEAL: :frag (appear)
+   \[
+   \frac{\left\{ R \ast P \right\} \ e \ \left\{ R \ast Q \right\} \qquad e
+   \text{ atomic} }{\left\{ \boxed{R} \ast P \right\} \ e \ \left\{ \boxed{R} \ast Q \right\} }
+   \]
+   #+ATTR_REVEAL: :frag (appear)
+  + Open invariant to acquire temporary ownership of shared resource
+  + Once invariant is reestablished, it can be closed again
+
+
 ** Example: Proof of =newCounter()=
 - Recall
   - \(Inv(l) := \boxed{\exists m. \ l \mapsto m \ast \boxed{\bullet m}_{g}^{\gamma}} \)
-  - \(\mathtt{newCounter}() := \mathtt{ref}(0) \)
-#+ATTR_REVEAL: :frag (appear)
+  - \(True \Rrightarrow \exists\gamma.\boxed{\bullet n}_g^\gamma * \boxed{\circ n}_{g}^{\gamma} \)
+#+ATTR_REVEAL: :frag appear
 - \( \{ True \} \ \mathtt{newCounter}() \ \{ l. \ \boxed{\circ
   0}_{g}^{\gamma} \ast Inv(l) \} \)
-- introduce invariant & ghost allocation
+#+ATTR_REVEAL: :frag appear
+- \(\{ True \}\)
+  #+ATTR_REVEAL: :frag appear
+  \(\{\boxed{\bullet 0}_g^\gamma * \boxed{\circ 0}_{g}^{\gamma}\}\)
+- \(\ \mathtt{ref}(0)\)
+  #+ATTR_REVEAL: :frag appear
+  \(\left\{l.\ l\mapsto 0 * \boxed{\bullet 0}_g^\gamma * \boxed{\circ 0}_{g}^{\gamma}\right\}\)
+  #+ATTR_REVEAL: :frag appear
+  \(\left\{ l. \ \boxed{\circ0}_{g}^{\gamma} \ast \boxed{\exists m. \ l \mapsto m \ast \boxed{\bullet m}_g^{\gamma}}\right\}\)
 
 ** Example: Proof of =incr l=
 - Recall
@@ -289,93 +327,32 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
    \end{align*}
 
 #+ATTR_REVEAL: :frag (appear)
-- \( \{ True \} \ \mathtt{newCounter}() \ \{ l. \ \boxed{\circ
-  0}_{g}^{\gamma} \ast Inv(l) \} \)
-- introduce invariant rule
-- introduce view shift
-
-* Notes
-- show example program, what triple to prove
-- mention partial correctness (even {True}C{True} shows doesn't crash)
-- construct ghost monoid for protocol
-- show invariants (define invariant, show rules e.g. unboxing invariant)
-- execute proof
-  + change ghost state (introduce view shifts)
-  + ...
-** Invariants
-- Allow us to reason about shared state
-- Notation: \(\boxed{R}\)
-- Duplicable: \(\boxed{R} \vdash \boxed{R} \ast \boxed{R}\)
-
-** Working with Invariants
-\[
-\frac{\left\{ R \ast P \right\} \ e \ \left\{ R \ast Q \right\} \qquad e
-\text{ atomic} }{\left\{ \boxed{R} \ast P \right\} \ e \ \left\{ \boxed{R} \ast Q \right\} }
-\]
-
-- Invariant rule
-   #+ATTR_REVEAL: :frag (appear)
-  + Open invariant to acquire temporary ownership of shared resource
-  + Once invariant is reestablished, it can be closed again
-
-** Working with Invariants (cont'd)
-\[
-\frac{\left\{ \boxed{R} \ast P \right\} \ e \ \left\{ Q \right\}
-}{\left\{ R \ast P \right\} \ e \ \left\{ Q \right\} }
-\]
-
-- Allocation rule
-   #+ATTR_REVEAL: :frag (appear)
-   - Create invariant and give up ownership of \(R\)
-       
-** Ghost state
-#+ATTR_REVEAL: :frag (appear)
-- For element \(a\) in Monoid, exists corresponding ghost
-  assertion \(\boxed{a}_{g}\)
-  + Asserts \(a \neq \bot\) & ownership of an \(a\) fragment of
-    the global ghost state
-- Can update global ghost state
-   + Expressed as /view shifts/
-   + \(P \Rrightarrow Q\): Can update the state from \(P\) to \(Q\) without
-     changing program state
-- Ghost resources can be split and combined arbitrarily: \(\boxed{t \cdot
-  u}_{g} \iff  \boxed{t}_{g} \ast \boxed{u}_{g}\)
-
-** Ghost state
-\[
-\frac{a \rightsquigarrow B}{\boxed{a}_{g} \Rrightarrow \exists b \in B. \boxed{b}_{g}}
-\]
+- \( \left\{\boxed{\circ n}_g^{\gamma }* Inv(l)\right\} \ \mathtt{incr}\ l \ \left\{ u.\ \boxed{\circ
+  (n+1)}_{g}^{\gamma} \ast Inv(l) \right\} \)
 
 #+ATTR_REVEAL: :frag (appear)
-- \(a \rightsquigarrow B\) is shortand for \(\Box \forall a_{f}.  \ a
-  \cdot a_{f} \neq \bot \implies \exists b \in B. \ b \cdot a_{f} \neq
-  \bot\)
-- Always modality \(\Box P\)
-  + \(P\) holds; does not assert ownership
-  + Duplicatable
-- Frame update rule
-  + State obtained by composing the contributions of all threads is a
-    valid element (not \(\bot\))
+- \(\left\{\boxed{\circ n}_g^{\gamma }* Inv(l)\right\}\)
+- \(\ \mathtt{let\ n:=!\ l}\)
+  #+ATTR_REVEAL: :frag appear
+  \(\left\{k.\ \boxed{\circ n}_g^{\gamma }* Inv(l)\right\}\)
+  #+ATTR_REVEAL: :frag appear
+  \(\left\{k.\ \boxed{\circ n}_g^{\gamma }* \exists m. \ l \mapsto m \ast \boxed{\bullet m}_{g}^{\gamma} \right\}\)
+  #+ATTR_REVEAL: :frag appear
+  \(\{k.\ l\mapsto k * \boxed{\bullet k \cdot\circ n}_g^\gamma \}\)
+** Proof of =Incr l=
+- Previous State:
 
-** Example
-#+begin_src c
-{ l ↦ n }
-l ← addOne(l) ‖ l ← addOne(l)
-!l
-{ v. v = n + 2 }
-#+end_src
-
-#+ATTR_REVEAL: :frag (appear)
-- Use the /authoritative monoid/ (use ghost state instead with heap monoid instantiation)
-   #+ATTR_REVEAL: :frag (appear)
-  + Ghost variables come in pairs \(\gamma \hookrightarrow_{\bullet} n \ast \gamma    \hookrightarrow_{\circ} n\)
-  + One owns the global authoritative state of ghost resource
-  + Everyone else owns fragments of resource
-- Invariant: \(\exists n_{1}, n_{2}. (n_{1} + n_{2}) \ast \gamma_{1} \hookrightarrow_{\bullet} n_{1} \ast
-  \gamma_{2} \hookrightarrow_{\bullet} n_{2}\)
-* Logical atomicity
-- transactions
-- this exists
+  \(\{k.\ l\mapsto k * \boxed{\bullet k \cdot\circ n}_g^\gamma \}\\\)
+  \(\ \mathtt{CAS(l,n,n+1)}\)
+  #+ATTR_REVEAL: :frag appear
+  \(\left\{true.\ l\mapsto k+1 * \boxed{\bullet k \cdot\circ n}_g^\gamma \right\}\)
+  #+ATTR_REVEAL: :frag appear
+  \(\left\{true.\ l\mapsto k+1 * \boxed{\bullet (k+1) \cdot\circ (n+1)}_g^\gamma \right\}\)
+- \(\ \mathtt{then\ n}\)
+  #+ATTR_REVEAL: :frag appear
+  \(\left\{u.\ \boxed{\circ(n+1)}_{g}^{\gamma} * \boxed{\exists m. \ l \mapsto m \ast \boxed{\bullet m}_g^{\gamma}}\right\}\)
+  #+ATTR_REVEAL: :frag appear
+  \(\left\{u.\ \boxed{\circ(n+1)}_{g}^{\gamma} * Inv(l)\right\}\)
 * What we didn't talk about
 #+ATTR_REVEAL: :frag (appear)
 - Iris is largely about minimal base logic to derive expressive reasoning from
@@ -383,6 +360,7 @@ l ← addOne(l) ‖ l ← addOne(l)
   #+ATTR_REVEAL: :frag (appear)
   + soundness of the logic
   + this all exists, formalized in Rocq, but out of scope (of even the og 2015 paper)
+- logical atomicity
 * Discussion
 ** Strengths/Limitations
 #+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
@@ -404,48 +382,3 @@ l ← addOne(l) ‖ l ← addOne(l)
   #+ATTR_HTML: :width 100%
   [[file:csl-family-tree.png]]
 #+REVEAL_HTML: </div>
-
-=fetchAndAdd= atomic
-Proof outline using Ex(X) monoid
-
-{ True }
-let x = ref(0) in
-{ \(x \mapsto 0\) }
-// Allocate ghost resources
-{ \(x \mapsto 0 \ \ast \ \boxed{\gamma_{1} \mapsto 0}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto 0}_{g}\) }
-// Allocate invariant
-\(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \
-\boxed{\gamma_{2} \mapsto  n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)
-
-// Duplicate invariant
-\(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1} \mapsto
-n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)
- \(\ast \)
-\(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1} \mapsto
-n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)
-
-// Par rule
-\(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1} \mapsto
-n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)  \(\Vert\) \(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1} \mapsto
-n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)
-
-// Open invariant
-{ \(x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1} \mapsto n_{1}}_{g} \ \ast \
-\boxed{\gamma_{2} \mapsto n_{2}}_{g} \) }    \(\Vert\)    {\(\ x \mapsto n_{1} + n_{2} \ * \ \boxed{\gamma_{1}
-\mapsto n_{1}}_{g} \ \ast \
-\boxed{\gamma_{2} \mapsto n_{2}}_{g}\) }
-
-// ??? We don't know what value x points to
-x ← fetchAndAdd(x,2)                    \(\Vert\) x ← fetchAndAdd(x,2)
-
-
-// Close invariant
-\(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \
-\boxed{\gamma_{1} \mapsto n_{1}}_{g} \ \ast \ \boxed{\gamma_{2}
-\mapsto n_{2}}_{g}}\)  \(\Vert\) \(\boxed{\exists n_{1}, n_{2}. x \mapsto n_{1} + n_{2} \ * \
-\boxed{\gamma_{1} \mapsto n_{1}}_{g} \ \ast \ \boxed{\gamma_{2} \mapsto n_{2}}_{g}}\)
-
-
-
-!x
-{ v. v = 4 }
