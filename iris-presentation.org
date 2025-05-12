@@ -240,7 +240,7 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
   \[
   \{Inv(l, n)\}\
   \texttt{incr l}\
-  \{u. \ u \geq n * Inv(l, n+1)\}
+  \{u. \ Inv(l, n+1)\}
   \]
 - what should Inv(l, n) be?
   - 2. idea: lower bound $Inv(l, n) := \exists m.\ l \mapsto m \land m \geq n$
@@ -279,7 +279,7 @@ A (commutative) monoid $M = (|M|, \cdot, \bot, \varepsilon)$ is an algebraic str
 - \(
   \{\boxed{\circ n}_{g}^{\gamma} \ast Inv(l)\}\
   \texttt{incr l}\
-  \{u. \ u \geq n \ast \boxed{\circ (n+1)}_{g}^{\gamma} \ast Inv(l)\}
+  \{u. \ \boxed{\circ (n+1)}_{g}^{\gamma} \ast Inv(l)\}
   \)
 ** Invariants in Iris
 #+ATTR_REVEAL: :frag (appear)
