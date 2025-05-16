@@ -1,0 +1,175 @@
+:REVEAL_PROPERTIES:
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_VERSION: 4
+#+REVEAL_THEME: white
+#+REVEAL_TRANS: slide
+#+REVEAL_MIN_SCALE: 1.0
+#+REVEAL_MAX_SCALE: 1.0
+#+REVEAL_PLUGINS: (math)
+#+OPTIONS: toc:nil num:nil timestamp:nil
+:END:
+
+
+#+TITLE: DimSum
+#+AUTHOR: Xinglu & Sascha
+
+
+* What is DimSum?
+*點心？咩嚟㗎？*
+
+A Rocq-based framework for reasoning about multi-language programs
+
+** Motivation
+#+ATTR_REVEAL: :frag (appear)
+- Many programs are written in mulitple different languages,
+   #+ATTR_REVEAL: :frag (appear)
+  - Linux kernel (C, Assembly and others)
+  - Tensorflow (Python, C++ and CUDA)
+- Often not sufficient to verify the program's components separately
+   - Also have to reason about the interactions between the languages
+
+** Goal
+- Reason about multi-language programs in a decentralized way
+
+** Decentralized??
+#+ATTR_REVEAL: :frag (appear)
+- No fixed source language as spec language
+  - Want to be able to link target code that is not representable in
+     the source code
+  - Important when some things have to be written
+     in language B because it would not be possible to write code in
+     language A that would do the same thing
+- No fixed set of languages
+  - Allow language-local reasoning
+  - Otherwise proofs about libraries in any one language must take
+     into account all the other languages used together in the
+     program
+    - These proof might not work if new language are added in the
+       future
+- No fixed memory model
+- No fixed notion of linking
+  - No fixed "official" notion of semantic linking
+  - Users can develop new, library-specific notions of linking that
+     support higher-level reasoning principles
+
+** Supported languages
+#+ATTR_REVEAL: :frag (appear)
+- Rec: high-level language with recursive functions
+- Asm: Assembly-like language
+- Spec: language for writing specifications
+   
+* Key Ideas
+- The semantics of a library \(L\) written in language \(\mathtt{L}\)
+  is a labeled transition system, called a /module/
+  - Think of modules as communicating processes
+  - Each language \(\mathtt{L}\) with a set of events
+    \(E_{\mathtt{L}}\),
+  - Give semantics to a library \(L\) as a module \( [ L
+    ]_{\mathtt{L}} \in \text{Module}(E_{\mathtt{L}}) \)
+  - Model interactions of modules (e.g. Asm jumps) as synchronization
+     on events (e.g. outgoing jumps are synchronized with incoming jumps)
+
+- Library of language-agnostic combinators for linking and
+   translating modules
+        
+- When we say "a program refines a specification" in formal methods, we mean:
+#+begin_quote
+The program behaves in a way that is allowed by (or consistent with)
+the specification — possibly being more detailed or deterministic,
+but never violating the rules or constraints laid out in the
+specification.
+#+end_quote
+- Refinement is defined as simulation on modules
+
+- \(A_{1} \cup_{a} A_{2}\): syntactic linking in Asm
+  - Takes two Asm-libraries \(A_{1}\) and \(A_{2}\) and combines their
+    program code
+- \(\downarrow R\): compilation from Rec-library \(R\) to Asm-library
+
+
+- Module semantics \([ R ]_{-}\) map  syntactic libraries into
+  semantic modules
+  - Based on operational semantics of the language
+  - Defined precisely in section 4
+     
+
+** Modules
+- How DimSum assigns meaning to every program component
+- Module \(M \in \text{Module}(E)\): a labeled transition system emitting events
+  - Events vary from language to language
+  - 
+   
+** Events
+- Formalize how modules interact with their environment
+- Model interaction of program components as event-based
+   communication (synchronization on events)
+- Events carry detailed description of the program state
+
+
+** Spec
+- Spec has co-inductively defined syntax????
+  - Can express unbounded loops
+
+** Example program
+\begin{align*}
+\mathtt{fn} \ \mathtt{main} () := \
+&\mathtt{local} \ x[3]; x[0] \gets 1; x[1] \gets 2; & // x \mapsto [1,2,0] \\ 
+&\mathtt{memmove}(x + 1, x + 0, 2); & // x \mapsto [1,1,2] \\
+&\mathtt{print}(x[1]); \mathtt{print}(x[2])
+\end{align*}
+
+
+\begin{align*}
+\mathtt{fn} \ \mathtt{memmove}(d,s,n) := \
+&\mathtt{if} \ \mathtt{locle}(d,s) \\
+&\mathtt{then} \ \mathtt{memcpy}(d,s,n,1) \\
+&\mathtt{else} \ \mathtt{memcpy}(d+n-1, s+n-1, n -1)
+\end{align*}
+
+\begin{align*}
+\mathtt{memcpy}(d,s,n,o) := \ &\mathtt{if} \ 0 < n \ \\
+&\mathtt{then} \ d \gets !s; \mathtt{memcpy}(d+0, s+0, n-1, 0)
+\end{align*}
+
+- \(\mathtt{locle}\) and \(\mathtt{print}\) cannot be implemented in
+  Rec
+
+*** Formalization
+- Spec: program prints 1 and then 2
+
+- \(\textbf{onetwo} := \ \downarrow \text{main} \ \cup_{a} \downarrow \text{memmove} \cup_{a} \mathbf{locle} \cup_{a} \mathbf{print}\)
+- \(\downarrow R: \) Compile Rec-library to Asm-library
+  - Compiler explained later
+
+- \(\mathbf{onetwo} \ _{a}\preceq_{s} \mathbf{onetwo}_{\text{spec}}\)
+
+** Semantic linking
+- \(M_{1} \ ^{d_{1}}\oplus_{a}^{d_{2}} M_{2}\) talkes two Asm-modules \( M_{1}\) and
+  \(M_{2}\) with associated instruction addresses \(d_{1}, d_{2}\) and
+  synchronizes them via their jump events
+- Takes two Asm transition systems and combines the into a large
+   transition system
+- Horizontal compositionality
+   - Compatibility with refinement
+   - Looks similar to par-rule from CSL?
+
+** Semantic wrapper
+- Semantic wrapper \(\lceil \cdot \rceil_{r \rightleftharpoons a}\) is an embedding of Rec modules
+  into Asm
+  - Translates between Rec-events and Asm-events
+  - Operate on modules instead of syntactic constructs (in contrast
+     to compiler)
+- Two important properties
+  - \(\downarrow R\) behaves like \(\lceil [ R ] \rceil_{r \rightleftharpoons a}\)
+  - Compatible with refinement
+
+* Discussion    
+** Strengths
+
+** Weaknesses
+#+ATTR_REVEAL: :frag (appear)
+- No real-world programming languages used
+- Has to verify compiler from lang A to B
+- No support for concurrency
+
+
