@@ -17,6 +17,8 @@
 * What is DimSum?
 *點心？咩嚟㗎？*
 
+[[file:dim-sum.jpg]]
+
 A Rocq-based framework for reasoning about multi-language programs
 
 ** Motivation
@@ -27,10 +29,10 @@ A Rocq-based framework for reasoning about multi-language programs
   - Linux kernel (C, Assembly and others)
   - Tensorflow (Python, C++ and CUDA)
 - Often not sufficient to verify the program's components separately
-   - Also have to reason about the interactions between the languages
+   - Have to reason about the interactions between the languages
 
 ** Goal
-- Reason about multi-language programs in a decentralized way
+- Reason about multi-language programs in a /decentralized/ way
 
 ** Decentralized??
 #+ATTR_REVEAL: :frag (appear)
@@ -71,14 +73,6 @@ A Rocq-based framework for reasoning about multi-language programs
      on events (e.g. outgoing jumps are synchronized with incoming jumps)
 - Library of language-agnostic combinators for linking and
    translating modules
-- When we say "a program refines a specification" in formal methods, we mean:
-#+begin_quote
-The program behaves in a way that is allowed by (or consistent with)
-the specification — possibly being more detailed or deterministic,
-but never violating the rules or constraints laid out in the
-specification.
-#+end_quote
-- Refinement is defined as simulation on modules
 
 - \(A_{1} \cup_{a} A_{2}\): syntactic linking in Asm
   - Takes two Asm-libraries \(A_{1}\) and \(A_{2}\) and combines their
@@ -101,6 +95,8 @@ specification.
 - Formalize how modules interact with their environment
 - Model interaction of program components as event-based
    communication (synchronization on events)
+  - Rec: function calls
+  - Asm: jumps and syscalls
 - Events carry detailed description of the program state
 
 ** Example program
@@ -127,35 +123,61 @@ specification.
 - \(\mathtt{locle}\) and \(\mathtt{print}\) cannot be implemented in
   Rec
 
-*** Formalization
-- Spec: program prints 1 and then 2
-
+** Proof Outline
+#+ATTR_REVEAL: :frag (appear)
 - \(\textbf{onetwo} := \ \downarrow \text{main} \ \cup_{a} \downarrow \text{memmove} \cup_{a} \mathbf{locle} \cup_{a} \mathbf{print}\)
-- \(\downarrow R: \) Compile Rec-library to Asm-library
-  - Compiler explained later
+- Spec: program prints 1 and then 2
+- \(\mathbf{onetwo} \ _{a}\preceq_{s} \mathbf{onetwo}_{\text{spec}} \equiv
+  [\mathbf{onetwo}]_{a} \preceq [\mathbf{onetwo}_{\text{spec}}]_{s}\)
+#+ATTR_REVEAL: :frag (appear)
+[[file:proof-outline.png]]
+#+ATTR_REVEAL: :frag (appear)
+- Each step of \(\mathbf{onetwo} \) can be matched by zero or more steps of
+  \(\mathbf{onetwo}_{\text{spec}}\)
 
-- \(\mathbf{onetwo} \ _{a}\preceq_{s} \mathbf{onetwo}_{\text{spec}}\)
+*** Specification
+talk about formal specification?
 
-** Semantic linking
-- \(M_{1} \ ^{d_{1}}\oplus_{a}^{d_{2}} M_{2}\) talkes two Asm-modules \( M_{1}\) and
-  \(M_{2}\) with associated instruction addresses \(d_{1}, d_{2}\) and
-  synchronizes them via their jump events
-- Takes two Asm transition systems and combines the into a large
-   transition system
+*** (1) to (2)
+\begin{align*}
+[\textbf{onetwo}]_{a} &= [\downarrow \text{main} \ \cup_{a} \downarrow \text{memmove} \cup_{a}
+\mathbf{locle} \cup_{a} \mathbf{print}]_{a} \\
+&\preceq [\downarrow \text{main}]_{a} \oplus_{a} [ \downarrow \text{memmove}]_{a} \oplus_{a} [\textbf{locle}]_{a} \oplus_{a} [\textbf{print}]_{a}
+\end{align*}
+
+#+ATTR_REVEAL: :frag (appear)
+- Semantic linking \(M_{1} \ ^{d_{1}}\oplus_{a}^{d_{2}} M_{2}\)
+- Synchronizes two communication processes
+- Takes two Asm transition systems and combines the into a larger
+  transition system
+
+# - two Asm-modules \( M_{1}\) and
+#   \(M_{2}\) with associated instruction addresses \(d_{1}, d_{2}\) and
+#   synchronizes them via their jump events
+
+
+# Separate slide for this?
 - Horizontal compositionality
-   - Compatibility with refinement
-   - Looks similar to par-rule from CSL?
+  - Compatibility with refinement
+  - Looks similar to par-rule from CSL?
 
-** Semantic wrapper
-- Semantic wrapper \(\lceil \cdot \rceil_{r \rightleftharpoons a}\) is an embedding of Rec modules
-  into Asm
-  - Translates between Rec-events and Asm-events
-  - Operate on modules instead of syntactic constructs (in contrast
-     to compiler)
+*** (2) to (3)
+\begin{align*}
+\ &[\downarrow \text{main}]_{a} \oplus_{a} [ \downarrow \text{memmove}]_{a} &\oplus_{a} [\textbf{locle}]_{a} \oplus_{a} [\textbf{print}]_{a} \\
+\preceq \ &\lceil [\text{main}]_{r} \rceil_{r \rightleftharpoons a} \oplus_{a} \lceil [\text{memmove}]_{r} \rceil_{r \rightleftharpoons a} &\oplus_{a} [\textbf{locle}]_{a} \oplus_{a} [\textbf{print}]_{a}
+\end{align*}
+
+#+ATTR_REVEAL: :frag (appear)
+- Semantic wrapper \(\lceil \cdot \rceil_{r \rightleftharpoons a}\)
+  - Embedding of Rec-modules into Asm
+  - Convert between Rec-events and Asm-events
+- Link modules that semantically are Asm-modules (syntactically Rec)
+
 - Two important properties
   - \(\downarrow R\) behaves like \(\lceil [ R ] \rceil_{r \rightleftharpoons a}\)
   - Compatible with refinement
-** Proof Outline
+
+   
 * Formalization
 ** Refinement Formally
 - this is super technical, we'll need more time here
@@ -171,4 +193,3 @@ specification.
 - No types
 - No liveness properties
 - Only toy languages
-- Has to verify compiler from lang A to B
