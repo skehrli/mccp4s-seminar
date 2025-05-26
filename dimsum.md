@@ -343,8 +343,9 @@ Case Study of DimSum: Rec, Asm, Spec
 
 Example Code
 ===
+![image:width:70%](main.png)
+![image:width:70%](libraries.png)
 
-- code
 - (how does a module look like here?)
 
 ---
@@ -352,17 +353,45 @@ Example Code
 
 Proof Outline
 ===
+![image:width:80%](proof-outline.png)
 
-- show first, second step
-- wrappers
+- Spec: program prints 1 and then 2
+
+<!-- column_layout: [1,1] -->
+<!-- column: 0 -->
+<!-- pause -->
+## Step (1) to (2)
+<!-- pause -->
+- Semantic linking
+<!-- pause -->
+- Horizontal compositionality
+  
+![](hor-comp.png)
+
+<!-- column: 1 -->
+<!-- pause -->
+## Step (2) to (3)
+<!-- pause -->
+- Semantic wrapper 
+<!-- pause -->
+  - Link modules not _syntactically_ Asm but _semantically_ Asm
+<!-- pause -->
+  - Convert between events of different languages
 
 ---
 <!-- font_size: 2 -->
 
 Wrappers
 ===
-
-- required to reason about semantic differences between languages
+![](wrapper.png)
+<!-- pause -->
+- Property: compiled Rec library behaves like semantically translated
+  module
+  
+```typst +render
+#let sem(x) = ("⟦" + x + "⟧")
+$arrow.b R prec.eq ceil.l sem(R)_(r) ceil.r _(r harpoons.rtlb a)$
+```
 
 ---
 <!-- font_size: 2 -->
@@ -371,3 +400,25 @@ Refinement
 ===
 
 - simulation of one module of another
+
+---
+<!-- font_size: 2 -->
+
+Discussion
+===
+<!-- column_layout: [1,1] -->
+<!-- column: 0 -->
+<!-- pause -->
+## Strengths
+- modules as reasoning domain good idea
+- Generic linking combinator
+- Fully mechanized in Rocq
+
+<!-- pause -->
+<!-- column: 1 -->
+## Weaknesses
+- No concurrency
+- No types
+- No liveness properties
+- Only toy languages
+
