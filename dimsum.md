@@ -341,30 +341,32 @@ Case Study of DimSum: Rec, Asm, Spec
 ---
 <!-- font_size: 2 -->
 
-Example Code
+Verification Example
 ===
+<!-- pause -->
 ![image:width:70%](main.png)
+<!-- pause -->
 ![image:width:70%](libraries.png)
-
-- (how does a module look like here?)
 
 ---
 <!-- font_size: 2 -->
 
 Proof Outline
 ===
+<!-- pause -->
 ![image:width:80%](proof-outline.png)
 
-- Spec: program prints 1 and then 2
+<!-- pause -->
+> Spec: "program prints 1 and then 2"
 
 <!-- column_layout: [1,1] -->
 <!-- column: 0 -->
 <!-- pause -->
 ## Step (1) to (2)
 <!-- pause -->
-- Semantic linking
+  - Semantic linking
 <!-- pause -->
-- Horizontal compositionality
+  - Proof Rule: _Horizontal compositionality_
   
 ![](hor-comp.png)
 
@@ -372,26 +374,17 @@ Proof Outline
 <!-- pause -->
 ## Step (2) to (3)
 <!-- pause -->
-- Semantic wrapper 
+  - assuming correct compiler
 <!-- pause -->
-  - Link modules not _syntactically_ Asm but _semantically_ Asm
-<!-- pause -->
-  - Convert between events of different languages
+![](comp.png)
 
 ---
 <!-- font_size: 2 -->
 
 Wrappers
 ===
-![](wrapper.png)
 <!-- pause -->
-- Property: compiled Rec library behaves like semantically translated
-  module
-  
-```typst +render
-#let sem(x) = ("⟦" + x + "⟧")
-$arrow.b R prec.eq ceil.l sem(R)_(r) ceil.r _(r harpoons.rtlb a)$
-```
+![](translate.png)
 
 ---
 <!-- font_size: 2 -->
@@ -399,7 +392,13 @@ $arrow.b R prec.eq ceil.l sem(R)_(r) ceil.r _(r harpoons.rtlb a)$
 Refinement
 ===
 
-- simulation of one module of another
+<!-- pause -->
+> "simulation of one module of another"
+
+<!-- pause -->
+![](refineformal.png)
+<!-- pause -->
+![](refine.jpg)
 
 ---
 <!-- font_size: 2 -->
@@ -410,15 +409,15 @@ Discussion
 <!-- column: 0 -->
 <!-- pause -->
 ## Strengths
-- modules as reasoning domain good idea
-- Generic linking combinator
-- Fully mechanized in Rocq
+  - modules as reasoning domain good idea
+  - Generic linking combinator
+  - Fully mechanized in Rocq
 
 <!-- pause -->
 <!-- column: 1 -->
 ## Weaknesses
-- No concurrency
-- No types
-- No liveness properties
-- Only toy languages
+  - No concurrency
+  - No types
+  - No liveness properties
+  - Only toy languages
 
