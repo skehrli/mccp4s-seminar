@@ -265,36 +265,78 @@ Semantics in DimSum: Modules and Events
 
 <!-- pause -->
 ## Idea (1)
+<!-- column_layout: [1,1] -->
+<!-- column: 0 -->
   <!-- pause -->
   ```typst +render
    $⟦*⟧_"L" : "Prog"_"L" -> "Module"_"E"$
   ```
   <!-- pause -->
-  - module: labelled state transition system
+  - module: state transition system
+  ```typst +render
+   $M(E) = (S, ->, sigma^0)\
+   -> subset.eq S times (E union.plus {tau}) times cal(P)(S)$
+  ```
+<!-- column: 1 -->
   <!-- pause -->
-  - parametric in event set E
+  ![image:width:100%](module.jpg)
+<!-- reset_layout -->
 
-  - think: communicating processes, emitting and consuming events from E
-
-  - show a figure of how such a state transition system looks like
-  - remove text
 
 ---
 <!-- font_size: 2 -->
 
-Intuition:
-How does semantic linking look like
-Quickly how refinement works intuitively.
+Semantic Linking: Combining Modules
+===
+
+<!-- pause -->
+## Goal
+  <!-- pause -->
+  - combine semantic modules
+  ```typst +render
+    #let sem(x) = ("⟦" + x + "⟧")
+    $sem(S_1) xor sem(S_2) xor ... xor sem(S_n)$
+  ```
+
+<!-- pause -->
+## Idea (2)
+<!-- column_layout: [1,1] -->
+<!-- column: 0 -->
+  <!-- pause -->
+  - semantic linker is "runtime interpreter" over M1, M2
+  ```typst +render
+   $xor_"E" : "Module"_"E" -> "Module"_"E" -> "Module"_"E"$
+  ```
+  <!-- pause -->
+  - defined by tuple
+  ```typst +render
+   $(S,arrow.r.squiggly, s_0)\
+   arrow.r.squiggly subset.eq ({L,R,E} times S times E) times ({L,R,E} times S times (E union {crossmark.heavy}))$
+  ```
+  <!-- pause -->
+  ![](transition.png)
+<!-- column: 1 -->
+  ![image:width:100%](semlinking.jpg)
+<!-- reset_layout -->
+
 
 ---
 <!-- font_size: 2 -->
 
 Case Study of DimSum: Rec, Asm, Spec
 ===
+<!-- pause -->
+## Rec
+![](rec.png)
 
-- screenshots of asm, spec grammar
-- many of the reasoning primitives in dimsum left abstract, thus, integral part of the paper is a case study
-  where they apply the principles on verifying a program in three languages
+<!-- pause -->
+## Assembly Language
+![](asm.png)
+
+<!-- pause -->
+## Mathematical Specification Language
+![](spec.png)
+
 
 ---
 <!-- font_size: 2 -->
