@@ -274,6 +274,17 @@ Semantics in DimSum: Modules and Events
   <!-- pause -->
   - parametric in event set E
 
+  - think: communicating processes, emitting and consuming events from E
+
+  - show a figure of how such a state transition system looks like
+  - remove text
+
+---
+<!-- font_size: 2 -->
+
+Intuition:
+How does semantic linking look like
+Quickly how refinement works intuitively.
 
 ---
 <!-- font_size: 2 -->
@@ -281,7 +292,9 @@ Semantics in DimSum: Modules and Events
 Case Study of DimSum: Rec, Asm, Spec
 ===
 
-- screenshots of operational semantics
+- screenshots of asm, spec grammar
+- many of the reasoning primitives in dimsum left abstract, thus, integral part of the paper is a case study
+  where they apply the principles on verifying a program in three languages
 
 ---
 <!-- font_size: 2 -->
@@ -290,7 +303,7 @@ Example Code
 ===
 
 - code
-- how does a module look like here?
+- (how does a module look like here?)
 
 ---
 <!-- font_size: 2 -->
@@ -299,22 +312,7 @@ Proof Outline
 ===
 
 - show first, second step
-
----
-<!-- font_size: 2 -->
-
-Semantic Linking
-===
-
-- show how it is defined as synchronizing on events
-
----
-<!-- font_size: 2 -->
-
-Refinement
-===
-
-- simulation of one module of another
+- wrappers
 
 ---
 <!-- font_size: 2 -->
@@ -323,3 +321,11 @@ Wrappers
 ===
 
 - required to reason about semantic differences between languages
+
+---
+<!-- font_size: 2 -->
+
+Refinement
+===
+
+- simulation of one module of another
