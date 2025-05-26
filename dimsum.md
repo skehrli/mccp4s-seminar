@@ -251,8 +251,29 @@ Does DimSum Adhere?
 Semantics in DimSum: Modules and Events
 ===
 
-- what is a module
-- parametric in event lang
+<!-- pause -->
+## Goal
+  <!-- pause -->
+  - define semantics function
+  ```typst +render
+   $⟦*⟧_"L" : "Prog"_"L" -> "Semantic Domain"$
+  ```
+  <!-- pause -->
+  - must be defined for every language separately
+  <!-- pause -->
+  - BUT: what should _Semantic Domain_ be?
+
+<!-- pause -->
+## Idea (1)
+  <!-- pause -->
+  ```typst +render
+   $⟦*⟧_"L" : "Prog"_"L" -> "Module"_"E"$
+  ```
+  <!-- pause -->
+  - module: labelled state transition system
+  <!-- pause -->
+  - parametric in event set E
+
 
 ---
 <!-- font_size: 2 -->
